@@ -15,14 +15,12 @@
 #include "c8games/TICTAC_lzsa_bin.h"
 #include "c8games/UFO_lzsa_bin.h"
 #include "c8games/WIPEOFF_lzsa_bin.h"
-#include "tests/test_bc_lzsa_bin.h"
-#include "tests/test_coraxplus_lzsa_bin.h"
-#include "tests/test_flags_lzsa_bin.h"
-#include "tests/test_metteo_lzsa_bin.h"
-#include "tests/test_quirks_lzsa_bin.h"
-#include "tests/test_quirks_lzsa_bin.h"
-#include "tests/test_skosolur_lzsa_bin.h"
-#include "tests/test_skosolur_lzsa_bin.h"
+#include "john/br8kout_lzsa_bin.h"
+#include "john/flightrunner_lzsa_bin.h"
+#include "john/glitchghost_lzsa_bin.h"
+#include "john-schip/rockto_lzsa_bin.h"
+#include "john-schip/turnover77_lzsa_bin.h"
+#include "john-schip/ultimatetictactoe_lzsa_bin.h"
 
 #define LAUNCHER_ENTRIES_COUNT 25
 
@@ -43,6 +41,8 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
             255,
             255
         },
+        10,
+        4088,
         "Blinky"
     },
     {
@@ -61,6 +61,8 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
             255,
             255
         },
+        823,
+        3822,
         "Blitz"
     },
     {
@@ -79,6 +81,8 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
             255,
             255
         },
+        0,
+        4095,
         "Brix"
     },
     {
@@ -97,6 +101,8 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
             255,
             255
         },
+        0,
+        4095,
         "Connect Four"
     },
     {
@@ -115,6 +121,8 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
             255,
             255
         },
+        0,
+        4095,
         "Guess Your Number"
     },
     {
@@ -133,6 +141,8 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
             255,
             255
         },
+        0,
+        4095,
         "Hidden"
     },
     {
@@ -151,6 +161,8 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
             255,
             255
         },
+        0,
+        2553,
         "Invaders"
     },
     {
@@ -169,6 +181,8 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
             255,
             255
         },
+        0,
+        4095,
         "Kaleid"
     },
     {
@@ -187,6 +201,8 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
             255,
             255
         },
+        0,
+        4095,
         "Merlin"
     },
     {
@@ -205,6 +221,8 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
             255,
             255
         },
+        0,
+        4095,
         "Missile"
     },
     {
@@ -223,6 +241,8 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
             255,
             255
         },
+        0,
+        4095,
         "Pong (1)"
     },
     {
@@ -241,6 +261,8 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
             255,
             255
         },
+        0,
+        4095,
         "Pong (2)"
     },
     {
@@ -259,6 +281,8 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
             255,
             255
         },
+        0,
+        4095,
         "Puzzle"
     },
     {
@@ -277,6 +301,8 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
             255,
             255
         },
+        594,
+        4095,
         "Tank"
     },
     {
@@ -295,6 +321,8 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
             255,
             255
         },
+        0,
+        4095,
         "Tic-Tac-Toe"
     },
     {
@@ -313,6 +341,8 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
             255,
             255
         },
+        0,
+        4095,
         "UFO"
     },
     {
@@ -331,12 +361,14 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
             255,
             255
         },
+        0,
+        4095,
         "Wipeoff"
     },
     {
-        test_bc_lzsa,
+        NULL,
         9,
-        1,
+        0,
         {
             255,
             255,
@@ -349,132 +381,148 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
             255,
             255
         },
-        "Test - BC"
+        0,
+        4095,
+        ""
     },
     {
-        test_coraxplus_lzsa,
+        br8kout_lzsa,
+        64,
+        0,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        0,
+        4095,
+        "Br8kout"
+    },
+    {
+        flightrunner_lzsa,
+        64,
+        0,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        22,
+        4075,
+        "Flight Runner"
+    },
+    {
+        glitchghost_lzsa,
+        64,
+        0,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        0,
+        4095,
+        "Glitch Ghost"
+    },
+    {
+        NULL,
         9,
         0,
         {
-            10,
             255,
-            14,
+            255,
+            2,
             6,
-            15,
+            8,
             4,
             255,
             255,
             255,
             255
         },
-        "Test - Corax+"
-    },
-    {
-        test_flags_lzsa,
-        9,
         0,
-        {
-            10,
-            255,
-            14,
-            6,
-            15,
-            4,
-            255,
-            255,
-            255,
-            255
-        },
-        "Test - Flags"
+        4095,
+        ""
     },
     {
-        test_metteo_lzsa,
-        9,
-        0,
-        {
-            10,
-            255,
-            14,
-            6,
-            15,
-            4,
-            255,
-            255,
-            255,
-            255
-        },
-        "Test - Metteo"
-    },
-    {
-        test_quirks_lzsa,
-        9,
-        0,
-        {
-            10,
-            255,
-            14,
-            6,
-            15,
-            4,
-            255,
-            255,
-            255,
-            255
-        },
-        "Test - Quirks/CHIP8"
-    },
-    {
-        test_quirks_lzsa,
-        9,
+        rockto_lzsa,
+        48,
         1,
         {
-            10,
-            255,
-            14,
             6,
-            15,
-            4,
+            12,
+            5,
+            9,
+            8,
+            7,
             255,
             255,
             255,
             255
         },
-        "Test - Quirks/SCHIP"
+        273,
+        3822,
+        "Rockto"
     },
     {
-        test_skosolur_lzsa,
-        9,
-        0,
-        {
-            10,
-            255,
-            14,
-            6,
-            15,
-            4,
-            255,
-            255,
-            255,
-            255
-        },
-        "Test - Skosulor"
-    },
-    {
-        test_skosolur_lzsa,
-        9,
+        turnover77_lzsa,
+        32,
         1,
         {
-            10,
-            255,
-            14,
             6,
-            15,
-            4,
+            12,
+            5,
+            9,
+            8,
+            7,
             255,
             255,
             255,
             255
         },
-        "Test - Skosulor/SCHIP"
+        3457,
+        4084,
+        "Turnover '77"
+    },
+    {
+        ultimatetictactoe_lzsa,
+        32,
+        1,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        0,
+        4095,
+        "Ultimate Tic-Tac-Toe"
     }
 };

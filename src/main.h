@@ -9,6 +9,8 @@
 
 #define LAUNCHER_FLAG_SCHIP 0x01
 #define LAUNCHER_FLAG_DIAGONALS 0x02
+#define LAUNCHER_FLAG_XOCHIP 0x04
+#define LAUNCHER_FLAG_MONO_INVERT 0x80
 
 #define KEY_IDX_Y4    9
 #define KEY_IDX_Y3    8
@@ -26,7 +28,9 @@ typedef struct {
     uint8_t opcodes;
     uint8_t flags;
     uint8_t keymap[10];
-    char game_name[24];
+    uint16_t bg_color;
+    uint16_t fg_color;
+    char game_name[22];
 } launcher_entry_t;
 
 #endif /* _MAIN_H_ */

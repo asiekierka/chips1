@@ -1,12 +1,12 @@
-X1=2,X3=8,X4=4,X2=6,OPC=9
+X1=2,X3=8,X4=4,X2=6,OPC=9,BG=000,FG=FFF
 #c8games/15PUZZLE.lzsa.bin|15-Puzzle||FIXME
-c8games/BLINKY.lzsa.bin|Blinky|X1=3,X3=6,X4=7,X2=8,A=F,B=F,SCHIP,OPC=12|
-c8games/BLITZ.lzsa.bin|Blitz|A=7,B=5
+c8games/BLINKY.lzsa.bin|Blinky|X1=3,X3=6,X4=7,X2=8,A=F,B=F,SCHIP,OPC=12,BG=00A,FG=FF8|
+c8games/BLITZ.lzsa.bin|Blitz|A=7,B=5,BG=337,FG=EEE
 c8games/BRIX.lzsa.bin|Brix|OPC=7
 c8games/CONNECT4.lzsa.bin|Connect Four|A=15,B=15
 c8games/GUESS.lzsa.bin|Guess Your Number|A=5,B=F
 c8games/HIDDEN.lzsa.bin|Hidden|A=5,B=5,SCHIP
-c8games/INVADERS.lzsa.bin|Invaders|A=5,B=5,SCHIP
+c8games/INVADERS.lzsa.bin|Invaders|A=5,B=5,SCHIP,FG=9F9
 c8games/KALEID.lzsa.bin|Kaleid|
 c8games/MERLIN.lzsa.bin|Merlin|
 c8games/MISSILE.lzsa.bin|Missile|A=8,B=8
@@ -14,18 +14,34 @@ c8games/PONG.lzsa.bin|Pong (1)|A=C,B=D,X1=1,X3=4
 c8games/PONG2.lzsa.bin|Pong (2)|A=C,B=D,X1=1,X3=4
 c8games/PUZZLE.lzsa.bin|Puzzle|X1=8,X3=2,X4=4,X2=6|FIXME|
 #c8games/SYZYGY.lzsa.bin|Syzygy|X1=3,X3=6,X4=9,X2=9,A=E,B=E|FIXME
-c8games/TANK.lzsa.bin|Tank|X1=8,X3=2,X4=4,X2=6,A=5,B=5,OPC=11
+c8games/TANK.lzsa.bin|Tank|X1=8,X3=2,X4=4,X2=6,A=5,B=5,OPC=11,BG=252
 #c8games/TETRIS.lzsa.bin|Tetris|X4=5,X2=6,X3=7,A=4,B=4,X1=4
 c8games/TICTAC.lzsa.bin|Tic-Tac-Toe|DIAGONAL,A=5,SCHIP
 c8games/UFO.lzsa.bin|UFO|X1=5,X3=5
 #c8games/VBRIX.lzsa.bin|V-Brix|X1=1,X3=4,A=7,B=7|FIXME: Collisions
 #c8games/VERS.lzsa.bin|Vers|X1=1,X3=4|FIXME
 c8games/WIPEOFF.lzsa.bin|Wipeoff|
-tests/test_bc.lzsa.bin|Test - BC|SCHIP
-tests/test_coraxplus.lzsa.bin|Test - Corax+|X1=E,X3=F,A=A
-tests/test_flags.lzsa.bin|Test - Flags|X1=E,X3=F,A=A
-tests/test_metteo.lzsa.bin|Test - Metteo|X1=E,X3=F,A=A
-tests/test_quirks.lzsa.bin|Test - Quirks/CHIP8|X1=E,X3=F,A=A
-tests/test_quirks.lzsa.bin|Test - Quirks/SCHIP|X1=E,X3=F,A=A,SCHIP
-tests/test_skosolur.lzsa.bin|Test - Skosulor|X1=E,X3=F,A=A
-tests/test_skosolur.lzsa.bin|Test - Skosulor/SCHIP|X1=E,X3=F,A=A,SCHIP
+NULL||
+john/br8kout.lzsa.bin|Br8kout|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=64|
+#john/danm8ku.lzsa.bin|Danm8ku|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=255,FG=9F9|FIXME: Graphical glitches
+john/flightrunner.lzsa.bin|Flight Runner|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=64,BG=016,FG=FEB|
+john/glitchghost.lzsa.bin|Glitch Ghost|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=64|TODO: Edit help screen
+#john/pumpkindressup.lzsa.bin|Pumpkin "Dreess" Up||TODO: Edit help screen
+#john/rps_oj1.lzsa.bin|Rock, Paper, Scissors||TODO: Edit help screen
+NULL||
+# Eaty the Alien requires scrolling
+#john-schip/horseyjump.lzsa.bin|Horsey Jump|A=C,BG=050,FG=EEE|Requires drawing 16x16 sprites in lores
+#john-schip/octopeg.lzsa.bin|Octopeg|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=48,BG=124,FG=BDF,SCHIP|FIXME
+john-schip/rockto.lzsa.bin|Rockto|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=48,BG=111,FG=EEE,SCHIP|
+#john-schip/snake.lzsa.bin|Snake|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=48,BG=113,FG=5A5,SCHIP|
+john-schip/turnover77.lzsa.bin|Turnover '77|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=32,SCHIP,FG=FF4,BG=D81|
+john-schip/ultimatetictactoe.lzsa.bin|Ultimate Tic-Tac-Toe|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=32,SCHIP|
+#
+#tests/test_bc.lzsa.bin|Test - BC|SCHIP
+#tests/test_coraxplus.lzsa.bin|Test - Corax+|X1=E,X3=F,A=A
+#tests/test_flags.lzsa.bin|Test - Flags|X1=E,X3=F,A=A
+#tests/test_metteo.lzsa.bin|Test - Metteo|X1=E,X3=F,A=A
+#tests/test_quirks.lzsa.bin|Test - Quirks/CHIP8|X1=E,X3=F,A=A
+#tests/test_quirks.lzsa.bin|Test - Quirks/SCHIP|X1=E,X3=F,A=A,SCHIP
+#tests/test_skosolur.lzsa.bin|Test - Skosulor|X1=E,X3=F,A=A
+#tests/test_skosolur.lzsa.bin|Test - Skosulor/SCHIP|X1=E,X3=F,A=A,SCHIP

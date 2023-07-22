@@ -17,8 +17,15 @@ chip8_display:
 
     call __chip8_di_regxy_ydh
     mov dl, byte ptr [bx + di]
+#ifdef CHIP8_SUPPORT_SCHIP
+    and dx, 0x3F7F
+    test byte ptr [bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_HIRES
+    jnz chip8_display_xy_done
+chip8_display_xy_lores:
+#endif
     and dx, 0x1F3F
     shl dx, 1
+chip8_display_xy_done:
     // DL, DH = X, Y
     // convert to in-tile shift, index
     push ax
@@ -36,9 +43,6 @@ chip8_display:
     or al, dh
     mov si, ax
     add si, CHIP8_TILE_ADDRESS
-    pop cx
-    and cx, 0x000F // CX = height
-    jz chip8_display_done
 
     mov bp, CHIP8_RAM_ADDRESS
     add bp, word ptr [bx + CHIP8_STATE_INDEX]
@@ -48,6 +52,16 @@ chip8_display:
     push ds
     pop es
     pop ds
+
+#ifdef CHIP8_SUPPORT_SCHIP
+    test byte ptr [bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_HIRES
+    jnz chip8_display_hires
+#endif
+
+    pop cx
+    and cx, 0x000F // CX = height
+    jz chip8_display_done
+
     // SS:BP = graphics source
     // DS:SI = graphics destination
     // ES:BX = state
@@ -119,3 +133,95 @@ chip8_pxtbl_2x_right:
     .byte 0xF3
     .byte 0xFC
     .byte 0xFF
+
+#ifdef CHIP8_SUPPORT_SCHIP
+    // TODO: Optimize. We can use 8-bit shifts here.
+chip8_display_hires:
+    pop cx
+    and cx, 0x000F // CX = height
+    jz chip8_display_hires_16x16
+    
+    // SS:BP = graphics source
+    // DS:SI = graphics destination
+    // ES:BX = state
+    // CX = height
+    // DI = shift value
+    // AX, DX = unused
+chip8_display_hires_row:
+    push bx
+    xor dx, dx
+    mov dh, byte ptr [bp]
+    inc bp
+    // DX = pixel value
+    mov ax, dx
+    xchg cx, di
+    shr ax, cl
+    push cx
+    xor cl, 0xF
+    inc cl
+    shl dx, cl
+    pop cx
+    xchg cx, di
+    // AL, AH, DL, DH = tile words to XOR
+    pop bx
+    push ax
+    push dx
+    and ax, [si]
+    and dx, [si + 128]
+    or ax, dx
+    jz chip8_display_hires_row_nobit
+    mov byte ptr es:[bx + 0xF], 1
+chip8_display_hires_row_nobit:
+    pop dx
+    pop ax
+    xor [si], ax
+    xor [si + 128], dx
+    add si, 2
+    test si, 0x007F
+    loopne chip8_display_hires_row
+
+    jmp chip8_display_done
+
+chip8_display_hires_16x16:
+    // SS:BP = graphics source
+    // DS:SI = graphics destination
+    // ES:BX = state
+    // CX = height
+    // DI = shift value
+    // AX, DX = unused
+    mov cx, 16
+chip8_display_hires_16x16_row:
+    push bx
+    mov dx, word ptr [bp]
+    xchg dh, dl
+    add bp, 2
+    // DX = pixel value
+    mov ax, dx
+    xchg cx, di
+    shr ax, cl
+    push cx
+    xor cl, 0xF
+    inc cl
+    shl dx, cl
+    pop cx
+    xchg cx, di
+    // AL, AH, DL, DH = tile words to XOR
+    pop bx
+    push ax
+    push dx
+    and ax, [si]
+    and dx, [si + 128]
+    or ax, dx
+    jz chip8_display_hires_16x16_row_nobit
+    mov byte ptr es:[bx + 0xF], 1
+chip8_display_hires_16x16_row_nobit:
+    pop dx
+    pop ax
+    xor [si], ax
+    xor [si + 128], dx
+    add si, 2
+    test si, 0x007F
+    loopne chip8_display_hires_16x16_row
+
+    jmp chip8_display_done
+#endif

@@ -21,7 +21,7 @@ chip8_clear_display:
     cld
     rep stosw
 
-    pop di
+    pop di                                                                                                                                                                                                                                                                                                                                                        
     pop es
     ASM_PLATFORM_RET
 
@@ -154,6 +154,7 @@ chip8_machine_routine_ff:
     cmp ax, 0x00FF
     jne chip8_machine_routine_xochip
     or byte ptr [bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_HIRES
+    ret
 chip8_machine_routine_xochip:
 #endif
     jmp chip8_todo

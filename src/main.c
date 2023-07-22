@@ -32,22 +32,51 @@ void wait_for_vblank(void) {
 	while (inportb(IO_LCD_LINE) != 144) cpu_halt();	
 }
 
+__attribute__((no_assume_ss_data))
+static void chips1_subdisp_font_colors(bool invert) {
+	if (ws_system_color_active()) {
+		MEM_COLOR_PALETTE(1)[0 ^ invert] = 0x000;
+		MEM_COLOR_PALETTE(1)[1 ^ invert] = 0xFFF;
+	} else if (invert) {
+		outportw(IO_SCR_PAL(1), MONO_PAL_COLORS(7, 0, 0, 0));
+	} else {
+		outportw(IO_SCR_PAL(1), MONO_PAL_COLORS(0, 7, 0, 0));
+	}
+}
+
 __attribute__((interrupt))
 void subdisp_font_line_handler(void) {
 	if (inportb(IO_LCD_INTERRUPT) == 55) {
-		outportw(IO_SCR_PAL(1), MONO_PAL_COLORS(0, 7, 0, 0));
+		chips1_subdisp_font_colors(true);
 		outportb(IO_LCD_INTERRUPT, 63);
 	} else {
-		outportw(IO_SCR_PAL(1), MONO_PAL_COLORS(7, 0, 0, 0));
+		chips1_subdisp_font_colors(false);
 		outportb(IO_LCD_INTERRUPT, 55);
 	}
 
 	ws_hwint_ack(HWINT_LINE);
 }
 
+static void chips1_subdisp_game_colors(uint8_t flags, uint16_t bg, uint16_t fg) {
+	if (ws_system_color_active()) {
+		MEM_COLOR_PALETTE(2)[0] = bg;
+		MEM_COLOR_PALETTE(2)[1] = fg;
+		MEM_COLOR_PALETTE(2)[2] = bg;
+		MEM_COLOR_PALETTE(2)[3] = fg;
+		MEM_COLOR_PALETTE(3)[0] = bg;
+		MEM_COLOR_PALETTE(3)[1] = bg;
+		MEM_COLOR_PALETTE(3)[2] = fg;
+		MEM_COLOR_PALETTE(3)[3] = fg;
+	} else {
+		uint16_t invert = (flags & LAUNCHER_FLAG_MONO_INVERT) ? 0x7777 : 0x0000;
+		outportw(IO_SCR_PAL(2), MONO_PAL_COLORS(7, 0, 7, 0) ^ invert);
+		outportw(IO_SCR_PAL(3), MONO_PAL_COLORS(7, 7, 0, 0) ^ invert);
+	}
+}
+
 void chips1_init_subdisp_font(void) {
 	outportb(IO_DISPLAY_CTRL, inportb(IO_DISPLAY_CTRL) & ~DISPLAY_SCR2_ENABLE);
-	outportw(IO_SCR_PAL(1), MONO_PAL_COLORS(7, 0, 0, 0));
+	chips1_subdisp_font_colors(false);
 	outportb(IO_SCR2_WIN_X1, 0);
 	outportb(IO_SCR2_WIN_X2, 223);
 	outportb(IO_SCR2_WIN_Y1, 0);
@@ -100,9 +129,15 @@ void chips1_init_display(void) {
 
 	// configure palettes, memory
 	ws_display_set_shade_lut(SHADE_LUT_DEFAULT);
-	outportw(IO_SCR_PAL(0), MONO_PAL_COLORS(3, 6, 4, 1));
-	outportw(IO_SCR_PAL(2), MONO_PAL_COLORS(7, 0, 7, 0));
-	outportw(IO_SCR_PAL(3), MONO_PAL_COLORS(7, 7, 0, 0));
+	if (ws_mode_set(WS_MODE_COLOR)) {
+		MEM_COLOR_PALETTE(0)[0] = 0x999;
+		MEM_COLOR_PALETTE(0)[1] = 0x222;
+		MEM_COLOR_PALETTE(0)[2] = 0x666;
+		MEM_COLOR_PALETTE(0)[3] = 0xDDD;
+	} else {
+		outportw(IO_SCR_PAL(0), MONO_PAL_COLORS(3, 6, 4, 1));
+	}
+	chips1_subdisp_game_colors(0, 0x000, 0xFFF);
 	outportb(IO_SCR_BASE, SCR1_BASE(0x3000) | SCR2_BASE(0x3800));
 	outportw(IO_SCR1_SCRL_X, 0);
 	outportw(IO_SCR2_SCRL_X, 0);
@@ -190,7 +225,9 @@ void chips1_launcher_run(const launcher_entry_t __wf_rom* entry) {
 	memcpy(chip8_key_map, entry->keymap, 10);
 	chip8_opcodes_per_tick = entry->opcodes;
 	chip8_launcher_flags = entry->flags;
-	chip8_state.pflag |= entry->flags & 0x01;
+	chip8_state.pflag |= entry->flags & 0x05;
+	wait_for_vblank();
+	chips1_subdisp_game_colors(entry->flags, entry->bg_color, entry->fg_color);
 	chips1_run();
 }
 
@@ -202,9 +239,11 @@ static void draw_launcher_entry(uint8_t y, int i) {
 	if (i >= 0 && i < LAUNCHER_ENTRIES_COUNT) entry = &launcher_entries[i];
 	if (entry == NULL) {
 		ws_screen_fill_tiles(SCREEN_2, SCR_ENTRY_PALETTE(1) + FONT_TILE_OFFSET, 0, y, 28, 1);
+	} else if (entry->game_name[0] == 0) {
+		ws_screen_fill_tiles(SCREEN_2, SCR_ENTRY_PALETTE(1) + FONT_TILE_OFFSET + '-' - 32, 0, y, 28, 1);
 	} else {
 		uint8_t len = strlen(entry->game_name);
-		uint8_t start = (28 - len) >> 1;
+		uint8_t start = (29 - len) >> 1;
 		for (uint8_t x = 0; x < 28; x++) {
 			uint8_t chr = 32;
 			if (x >= start && x < start + len) {
@@ -234,15 +273,53 @@ void chips1_select_game(void) {
 		update_keys();
 		if (keys_pressed & KEY_X1) {
 			game_scroll_y_camera = game_scroll_y;
+			do {
+				game_scroll_y -= 8;
+				if (game_scroll_y < 0) {
+					game_scroll_y = (LAUNCHER_ENTRIES_COUNT - 1) * 8;
+				}
+			} while (launcher_entries[game_scroll_y >> 3].data == NULL);
+		} else if (keys_pressed & KEY_X3) {
+			game_scroll_y_camera = game_scroll_y;
+			do {
+				game_scroll_y += 8;
+				if (game_scroll_y >= LAUNCHER_ENTRIES_COUNT * 8) {
+					game_scroll_y = 0;
+				}
+			} while (launcher_entries[game_scroll_y >> 3].data == NULL);
+		} else if (keys_pressed & KEY_X4) {
+			game_scroll_y_camera = game_scroll_y;
 			game_scroll_y -= 8;
 			if (game_scroll_y < 0) {
 				game_scroll_y = (LAUNCHER_ENTRIES_COUNT - 1) * 8;
+			} else {
+				game_scroll_y -= 40;
+				if (game_scroll_y < 0) {
+					game_scroll_y = 0;
+				}
+				while (launcher_entries[game_scroll_y >> 3].data == NULL) {
+					game_scroll_y += 8;
+					if (game_scroll_y >= LAUNCHER_ENTRIES_COUNT * 8) {
+						game_scroll_y = 0;
+					}
+				}
 			}
-		} else if (keys_pressed & KEY_X3) {
+		} else if (keys_pressed & KEY_X2) {
 			game_scroll_y_camera = game_scroll_y;
 			game_scroll_y += 8;
 			if (game_scroll_y >= LAUNCHER_ENTRIES_COUNT * 8) {
 				game_scroll_y = 0;
+			} else {
+				game_scroll_y += 40;
+				if (game_scroll_y >= LAUNCHER_ENTRIES_COUNT * 8) {
+					game_scroll_y = (LAUNCHER_ENTRIES_COUNT - 1) * 8;
+				}
+				while (launcher_entries[game_scroll_y >> 3].data == NULL) {
+					game_scroll_y -= 8;
+					if (game_scroll_y < 0) {
+						game_scroll_y = (LAUNCHER_ENTRIES_COUNT - 1) * 8;
+					}
+				}
 			}
 		} else if (keys_pressed & KEY_A) {
 			return;

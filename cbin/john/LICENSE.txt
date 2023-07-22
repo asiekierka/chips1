@@ -1,0 +1,2 @@
+"This page collects programs written for the Chip8 platform which have been placed under a Creative Commons Zero "No Rights Reserved" license."
+Source: https://johnearnest.github.io/chip8Archive/

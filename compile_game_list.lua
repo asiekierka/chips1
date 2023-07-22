@@ -44,8 +44,14 @@ function apply_values(game, s)
 			game.flags = game.flags | 0x01
 		elseif key == "DIAGONAL" then
 			game.flags = game.flags | 0x02
+		elseif key == "INV" then
+			game.flags = game.flags | 0x80
 		elseif key == "OPC" then
 			game.opcodes = tonumber(value)
+		elseif key == "BG" then
+			game.bg = tonumber(value, 16)
+		elseif key == "FG" then
+			game.fg = tonumber(value, 16)
 		end
 	end
 end
@@ -64,9 +70,14 @@ for line in lines do
 			name=parts[2],
 			array_name=to_c_identifier(basename),
 			keymap={0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF},
+			bg=0x000,fg=0xFFF,
 			opcodes=9,
 			flags=0
 		}
+		if parts[1] == "NULL" then
+			game.hpath = ""
+			game.array_name = "NULL"
+		end
 		apply_values(game, header)
 		if #parts >= 3 then
 			apply_values(game, parts[3])
@@ -76,7 +87,9 @@ for line in lines do
 end
 
 for i,game in pairs(games) do
-	print("#include \"" .. game.hpath .. "\"")
+	if #game.hpath > 0 then
+		print("#include \"" .. game.hpath .. "\"")
+	end
 end
 print("")
 print("#define LAUNCHER_ENTRIES_COUNT " .. #games)
@@ -91,6 +104,8 @@ for i,game in pairs(games) do
 	for i=1,9 do print("            " .. game.keymap[i] .. ",") end
 	print("            " .. game.keymap[10])
 	print("        },")
+	print("        " .. game.bg .. ",")
+	print("        " .. game.fg .. ",")
 	print("        \"" .. game.name .. "\"")
 	if i == #games then print("    }") else print("    },") end
 end
