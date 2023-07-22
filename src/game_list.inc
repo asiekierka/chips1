@@ -15,20 +15,45 @@
 #include "c8games/TICTAC_lzsa_bin.h"
 #include "c8games/UFO_lzsa_bin.h"
 #include "c8games/WIPEOFF_lzsa_bin.h"
+#include "john/badkaijuju_lzsa_bin.h"
 #include "john/br8kout_lzsa_bin.h"
+#include "john/caveexplorer_lzsa_bin.h"
+#include "john/chipquarium_lzsa_bin.h"
+#include "john/down8_lzsa_bin.h"
 #include "john/flightrunner_lzsa_bin.h"
+#include "john/fuse_lzsa_bin.h"
+#include "john/ghostescape_lzsa_bin.h"
 #include "john/glitchghost_lzsa_bin.h"
+#include "john/mastermind_lzsa_bin.h"
+#include "john/octorancher_lzsa_bin.h"
+#include "john/outlaw_lzsa_bin.h"
+#include "john/piper_lzsa_bin.h"
+#include "john/pumpkindressup_lzsa_bin.h"
+#include "john/rps_oj1_lzsa_bin.h"
+#include "john/slipperyslope_lzsa_bin.h"
+#include "john/spacejam_lzsa_bin.h"
+#include "john/spaceracer_lzsa_bin.h"
+#include "john/spockpaperscissors_lzsa_bin.h"
+#include "john/superpong_lzsa_bin.h"
+#include "john/tank_lzsa_bin.h"
+#include "john/wdl_lzsa_bin.h"
+#include "john-schip/blackrainbow_lzsa_bin.h"
 #include "john-schip/rockto_lzsa_bin.h"
+#include "john-schip/sweetcopter_lzsa_bin.h"
 #include "john-schip/turnover77_lzsa_bin.h"
 #include "john-schip/ultimatetictactoe_lzsa_bin.h"
+#include "john/8ceattourny_d1_lzsa_bin.h"
+#include "john/8ceattourny_d2_lzsa_bin.h"
+#include "john/8ceattourny_d3_lzsa_bin.h"
+#include "john-schip/applejak_lzsa_bin.h"
+#include "john-schip/bulb_lzsa_bin.h"
+#include "john-schip/squad_lzsa_bin.h"
 
-#define LAUNCHER_ENTRIES_COUNT 25
+#define LAUNCHER_ENTRIES_COUNT 54
 
 static const launcher_entry_t __wf_rom launcher_entries[] = {
     {
         BLINKY_lzsa,
-        12,
-        1,
         {
             15,
             15,
@@ -43,12 +68,12 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         10,
         4088,
+        12,
+        1,
         "Blinky"
     },
     {
         BLITZ_lzsa,
-        9,
-        0,
         {
             7,
             5,
@@ -63,12 +88,12 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         823,
         3822,
+        9,
+        0,
         "Blitz"
     },
     {
         BRIX_lzsa,
-        7,
-        0,
         {
             255,
             255,
@@ -83,12 +108,12 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         0,
         4095,
+        7,
+        0,
         "Brix"
     },
     {
         CONNECT4_lzsa,
-        9,
-        0,
         {
             21,
             21,
@@ -103,12 +128,12 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         0,
         4095,
+        9,
+        0,
         "Connect Four"
     },
     {
         GUESS_lzsa,
-        9,
-        0,
         {
             5,
             15,
@@ -123,12 +148,12 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         0,
         4095,
+        9,
+        0,
         "Guess Your Number"
     },
     {
         HIDDEN_lzsa,
-        9,
-        1,
         {
             5,
             5,
@@ -143,12 +168,12 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         0,
         4095,
+        9,
+        1,
         "Hidden"
     },
     {
         INVADERS_lzsa,
-        9,
-        1,
         {
             5,
             5,
@@ -163,12 +188,12 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         0,
         2553,
+        9,
+        1,
         "Invaders"
     },
     {
         KALEID_lzsa,
-        9,
-        0,
         {
             255,
             255,
@@ -183,12 +208,12 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         0,
         4095,
+        9,
+        0,
         "Kaleid"
     },
     {
         MERLIN_lzsa,
-        9,
-        0,
         {
             255,
             255,
@@ -203,12 +228,12 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         0,
         4095,
+        9,
+        0,
         "Merlin"
     },
     {
         MISSILE_lzsa,
-        9,
-        0,
         {
             8,
             8,
@@ -223,12 +248,12 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         0,
         4095,
+        9,
+        0,
         "Missile"
     },
     {
         PONG_lzsa,
-        9,
-        0,
         {
             12,
             13,
@@ -243,12 +268,12 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         0,
         4095,
+        9,
+        0,
         "Pong (1)"
     },
     {
         PONG2_lzsa,
-        9,
-        0,
         {
             12,
             13,
@@ -263,12 +288,12 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         0,
         4095,
+        9,
+        0,
         "Pong (2)"
     },
     {
         PUZZLE_lzsa,
-        9,
-        0,
         {
             255,
             255,
@@ -283,12 +308,12 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         0,
         4095,
+        9,
+        0,
         "Puzzle"
     },
     {
         TANK_lzsa,
-        11,
-        0,
         {
             5,
             5,
@@ -303,12 +328,12 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         594,
         4095,
+        11,
+        0,
         "Tank"
     },
     {
         TICTAC_lzsa,
-        9,
-        3,
         {
             5,
             255,
@@ -323,12 +348,12 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         0,
         4095,
+        9,
+        3,
         "Tic-Tac-Toe"
     },
     {
         UFO_lzsa,
-        9,
-        0,
         {
             255,
             255,
@@ -343,12 +368,12 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         0,
         4095,
+        9,
+        0,
         "UFO"
     },
     {
         WIPEOFF_lzsa,
-        9,
-        0,
         {
             255,
             255,
@@ -363,12 +388,12 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         0,
         4095,
+        9,
+        0,
         "Wipeoff"
     },
     {
         NULL,
-        9,
-        0,
         {
             255,
             255,
@@ -383,12 +408,32 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         0,
         4095,
+        9,
+        0,
         ""
     },
     {
+        badkaijuju_lzsa,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        2463,
+        536,
+        16,
+        128,
+        "Bad Kaiju Ju"
+    },
+    {
         br8kout_lzsa,
-        64,
-        0,
         {
             6,
             12,
@@ -403,12 +448,72 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         0,
         4095,
+        64,
+        0,
         "Br8kout"
     },
     {
-        flightrunner_lzsa,
+        caveexplorer_lzsa,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        2146,
+        4084,
         64,
         0,
+        "Cave Explorer"
+    },
+    {
+        chipquarium_lzsa,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        831,
+        4095,
+        64,
+        0,
+        "Chipquarium"
+    },
+    {
+        down8_lzsa,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        2,
+        1727,
+        24,
+        0,
+        "down8"
+    },
+    {
+        flightrunner_lzsa,
         {
             6,
             12,
@@ -423,12 +528,52 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         22,
         4075,
+        64,
+        0,
         "Flight Runner"
     },
     {
-        glitchghost_lzsa,
-        64,
+        fuse_lzsa,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        2514,
+        96,
+        7,
+        128,
+        "Fuse"
+    },
+    {
+        ghostescape_lzsa,
+        {
+            0,
+            255,
+            2,
+            6,
+            8,
+            4,
+            255,
+            255,
+            255,
+            255
+        },
+        1007,
+        3855,
+        40,
         0,
+        "Ghost Escape"
+    },
+    {
+        glitchghost_lzsa,
         {
             6,
             12,
@@ -443,12 +588,272 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         0,
         4095,
+        64,
+        0,
         "Glitch Ghost"
     },
     {
-        NULL,
+        mastermind_lzsa,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        96,
+        4095,
+        64,
+        0,
+        "Mastermind"
+    },
+    {
+        octorancher_lzsa,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        0,
+        4095,
+        24,
+        0,
+        "Octo Rancher"
+    },
+    {
+        outlaw_lzsa,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        1328,
+        4000,
+        28,
+        0,
+        "Outlaw"
+    },
+    {
+        piper_lzsa,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        15,
+        4084,
+        128,
+        0,
+        "Piper"
+    },
+    {
+        pumpkindressup_lzsa,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        4084,
+        2146,
+        9,
+        128,
+        "Pumpkin 'Dreess' Up"
+    },
+    {
+        rps_oj1_lzsa,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        0,
+        4095,
         9,
         0,
+        "Rock, Paper, Scissors"
+    },
+    {
+        slipperyslope_lzsa,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        2783,
+        283,
+        64,
+        128,
+        "Slippery Slope"
+    },
+    {
+        spacejam_lzsa,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        0,
+        4095,
+        128,
+        0,
+        "SpaceJam!"
+    },
+    {
+        spaceracer_lzsa,
+        {
+            13,
+            14,
+            4,
+            6,
+            7,
+            4,
+            255,
+            255,
+            255,
+            255
+        },
+        0,
+        4095,
+        20,
+        0,
+        "Space Racer"
+    },
+    {
+        spockpaperscissors_lzsa,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        1092,
+        3822,
+        64,
+        0,
+        "Spock Paper Scissors"
+    },
+    {
+        superpong_lzsa,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        3310,
+        563,
+        90,
+        128,
+        "Super Pong"
+    },
+    {
+        tank_lzsa,
+        {
+            14,
+            255,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        2146,
+        4084,
+        160,
+        0,
+        "Tank!"
+    },
+    {
+        wdl_lzsa,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        3822,
+        1365,
+        64,
+        128,
+        "WDL"
+    },
+    {
+        NULL,
         {
             255,
             255,
@@ -463,12 +868,32 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         0,
         4095,
+        9,
+        0,
         ""
     },
     {
-        rockto_lzsa,
-        48,
+        blackrainbow_lzsa,
+        {
+            0,
+            0,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        1365,
+        3822,
+        192,
         1,
+        "Black Rainbow"
+    },
+    {
+        rockto_lzsa,
         {
             6,
             12,
@@ -483,12 +908,32 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         273,
         3822,
+        48,
+        1,
         "Rockto"
     },
     {
-        turnover77_lzsa,
-        32,
+        sweetcopter_lzsa,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        1112,
+        4095,
+        128,
         1,
+        "Sw8 Copter"
+    },
+    {
+        turnover77_lzsa,
         {
             6,
             12,
@@ -503,12 +948,12 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         3457,
         4084,
+        32,
+        1,
         "Turnover '77"
     },
     {
         ultimatetictactoe_lzsa,
-        32,
-        1,
         {
             6,
             12,
@@ -523,6 +968,168 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         },
         0,
         4095,
+        32,
+        1,
         "Ultimate Tic-Tac-Toe"
+    },
+    {
+        NULL,
+        {
+            255,
+            255,
+            2,
+            6,
+            8,
+            4,
+            255,
+            255,
+            255,
+            255
+        },
+        0,
+        4095,
+        9,
+        0,
+        ""
+    },
+    {
+        _8ceattourny_d1_lzsa,
+        {
+            6,
+            3,
+            2,
+            9,
+            8,
+            7,
+            255,
+            6,
+            5,
+            4
+        },
+        0,
+        4095,
+        64,
+        0,
+        "8ce 8ttorny: Disk 1"
+    },
+    {
+        _8ceattourny_d2_lzsa,
+        {
+            6,
+            3,
+            2,
+            9,
+            8,
+            7,
+            255,
+            6,
+            5,
+            4
+        },
+        0,
+        4095,
+        64,
+        0,
+        "8ce 8ttorny: Disk 2"
+    },
+    {
+        _8ceattourny_d3_lzsa,
+        {
+            6,
+            3,
+            2,
+            9,
+            8,
+            7,
+            255,
+            6,
+            5,
+            4
+        },
+        0,
+        4095,
+        64,
+        0,
+        "8ce 8ttorny: Disk 3"
+    },
+    {
+        NULL,
+        {
+            255,
+            255,
+            2,
+            6,
+            8,
+            4,
+            255,
+            255,
+            255,
+            255
+        },
+        0,
+        4095,
+        9,
+        0,
+        ""
+    },
+    {
+        applejak_lzsa,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        0,
+        3874,
+        128,
+        1,
+        "Applejak"
+    },
+    {
+        bulb_lzsa,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        3832,
+        895,
+        128,
+        1,
+        "Bulb"
+    },
+    {
+        squad_lzsa,
+        {
+            6,
+            12,
+            5,
+            9,
+            8,
+            7,
+            255,
+            255,
+            255,
+            255
+        },
+        2146,
+        4084,
+        128,
+        1,
+        "Squad"
     }
 };

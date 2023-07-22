@@ -25,12 +25,12 @@
 
 typedef struct {
     const void __wf_iram __far* data;
-    uint8_t opcodes;
-    uint8_t flags;
     uint8_t keymap[10];
     uint16_t bg_color;
     uint16_t fg_color;
-    char game_name[22];
+    uint16_t opcodes;
+    uint8_t flags;
+    char game_name[21];
 } launcher_entry_t;
 
 #endif /* _MAIN_H_ */

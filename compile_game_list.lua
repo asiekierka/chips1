@@ -98,14 +98,14 @@ print("static const launcher_entry_t __wf_rom launcher_entries[] = {")
 for i,game in pairs(games) do
 	print("    {")
 	print("        " .. game.array_name .. ",")
-	print("        " .. game.opcodes .. ",")
-	print("        " .. game.flags .. ",")
 	print("        {")
 	for i=1,9 do print("            " .. game.keymap[i] .. ",") end
 	print("            " .. game.keymap[10])
 	print("        },")
 	print("        " .. game.bg .. ",")
 	print("        " .. game.fg .. ",")
+	print("        " .. game.opcodes .. ",")
+	print("        " .. game.flags .. ",")
 	print("        \"" .. game.name .. "\"")
 	if i == #games then print("    }") else print("    },") end
 end

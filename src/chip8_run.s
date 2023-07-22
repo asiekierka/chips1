@@ -501,6 +501,8 @@ chip8_misc:
     je chip8s_misc_store_memory_rpl
     cmp al, 0x85
     je chip8s_misc_load_memory_rpl
+    cmp al, 0x30
+    je chip8_misc_set_sfont
 #endif
     jmp chip8_todo
 
@@ -547,6 +549,18 @@ chip8_misc_set_font:
     add ax, CHIP8_RAM_FONT_OFFSET
     mov word ptr [bx + CHIP8_STATE_INDEX], ax
     ret
+
+#ifdef CHIP8_SUPPORT_SCHIP
+chip8_misc_set_sfont:
+    call __chip8_di_regx
+    mov al, byte ptr [bx + di]
+    and al, 0x0F
+    mov dl, 10
+    mul dl
+    add ax, CHIP8_RAM_SFONT_OFFSET
+    mov word ptr [bx + CHIP8_STATE_INDEX], ax
+    ret
+#endif
 
 chip8_opcode12_table:
     .word chip8_machine_routine

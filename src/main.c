@@ -16,8 +16,8 @@
 #include "ws/keypad.h"
 #include "ws/system.h"
 
+uint16_t chip8_opcodes_per_tick;
 uint8_t chip8_key_map[10];
-uint8_t chip8_opcodes_per_tick;
 uint8_t chip8_launcher_flags;
 
 #define FONT_TILE_OFFSET (9 * 8)
@@ -155,12 +155,25 @@ void chips1_init_display(void) {
 }
 
 static uint16_t keys_pressed, keys_held, keys_released;
+static uint8_t repeat_counter = 0;
 
 static void update_keys(void) {
 	uint16_t new_keys_held = ws_keypad_scan();
 	keys_pressed = new_keys_held & (~keys_held); // held now but not before
 	keys_released = ~new_keys_held & keys_held; // held before but not now
 	keys_held = new_keys_held;
+
+	if (keys_held != 0) {
+		repeat_counter++;
+		if (repeat_counter == 18) {
+			keys_pressed |= keys_held;
+		} else if (repeat_counter == 23) {
+			repeat_counter = 18;
+			keys_pressed |= keys_held;
+		}
+	} else {
+		repeat_counter = 0;
+	}
 }
 
 static uint16_t last_c8_key;
@@ -262,7 +275,7 @@ void chips1_select_game(void) {
 	outportb(IO_SCR2_SCRL_Y, game_scroll_y_camera - GAME_SCROLL_Y_OFFSET);
 
 	while (true) {
-		for (int y = -7; y <= 6; y++) {
+		for (int y = -8; y <= 7; y++) {
 			draw_launcher_entry((y + game_index) & 0x1F, y + game_index);
 		}
 
@@ -326,7 +339,7 @@ void chips1_select_game(void) {
 		}
 
 		outportb(IO_SCR2_SCRL_Y, game_scroll_y_camera - GAME_SCROLL_Y_OFFSET);
-		int16_t new_game_scroll_y_camera = (game_scroll_y + game_scroll_y_camera) >> 1;
+		int16_t new_game_scroll_y_camera = (game_scroll_y + game_scroll_y_camera) / 2;
 		if (new_game_scroll_y_camera == game_scroll_y_camera) {
 			game_scroll_y_camera = game_scroll_y;
 		} else {
