@@ -30,7 +30,7 @@ typedef struct {
     uint16_t fg_color;
     uint16_t opcodes;
     uint8_t flags;
-    char game_name[21];
+    char game_name[23];
 } launcher_entry_t;
 
 #endif /* _MAIN_H_ */

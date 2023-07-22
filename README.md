@@ -71,4 +71,4 @@ Note that the quirks specific to SUPER-CHIP 1.0 are not supported.
 | - | - |
 | Stack size | 16 entries |
 | Maximum memory size (CHIP-8/SUPER-CHIP) | 4 KB |
-| Maximum memory size (XO-CHIP | 47.5 KB (64 KB expected) |
+| Maximum memory size (XO-CHIP | 45.5 KB (64 KB expected) |

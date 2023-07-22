@@ -59,8 +59,8 @@ void chip8_init(uint8_t pflag) {
 #ifdef CHIP8_SUPPORT_XOCHIP
     if (pflag & CHIP8_PFLAG_XOCHIP) {
         chip8_state.pitch = 64;
-        chip8_state.ram = (uint8_t __wf_iram*) 0x4000;
-        memset(chip8_state.ram, 0, 0xFE00 - 0x4000);
+        chip8_state.ram = (uint8_t __wf_iram*) 0x4800;
+        memset(chip8_state.ram, 0, 0xFE00 - 0x4800);
     } else
 #endif
     {

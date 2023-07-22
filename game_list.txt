@@ -69,12 +69,14 @@ john-schip/applejak.lzsa.bin|Applejak|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=128,SCHIP,
 john-schip/bulb.lzsa.bin|Bulb|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=128,SCHIP,FG=37F,BG=EF8|
 john-schip/squad.lzsa.bin|Squad|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=128,SCHIP,FG=FF4,BG=862|
 #NULL||
+#john-xochip/businessiscontagious.lzsa.bin|Business Is Contagious|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=128,XOCHIP|
+#NULL||
 #tests/test_bc.lzsa.bin|Test - BC|SCHIP
 #tests/test_coraxplus.lzsa.bin|Test - Corax+|X1=E,X3=F,A=A
 #tests/test_flags.lzsa.bin|Test - Flags|X1=E,X3=F,A=A
 #tests/test_metteo.lzsa.bin|Test - Metteo|X1=E,X3=F,A=A
-tests/test_quirks.lzsa.bin|Test - Quirks/CHIP8|X1=E,X3=F,A=A
-tests/test_quirks.lzsa.bin|Test - Quirks/SCHIP|X1=E,X3=F,A=A,SCHIP
-tests/test_quirks.lzsa.bin|Test - Quirks/XOCHIP|X1=E,X3=F,A=A,XOCHIP
+#tests/test_quirks.lzsa.bin|Test - Quirks/CHIP8|X1=E,X3=F,A=A
+#tests/test_quirks.lzsa.bin|Test - Quirks/SCHIP|X1=E,X3=F,A=A,SCHIP
+#tests/test_quirks.lzsa.bin|Test - Quirks/XOCHIP|X1=E,X3=F,A=A,XOCHIP
 #tests/test_skosolur.lzsa.bin|Test - Skosulor|X1=E,X3=F,A=A
 #tests/test_skosolur.lzsa.bin|Test - Skosulor/SCHIP|X1=E,X3=F,A=A,SCHIP

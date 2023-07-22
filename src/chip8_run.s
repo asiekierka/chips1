@@ -52,7 +52,7 @@ chip8_run_opcode:
     shr di, 11
     and di, 0xFFFE
     call cs:[di + chip8_opcode12_table]
-    and si, 0xFFF
+    // and si, 0xFFF
     loop chip8_run_opcode
 
 chip8_run_opcode_early_return:
@@ -114,6 +114,7 @@ chip8_call:
     add dx, 2
     mov word ptr [bx + CHIP8_STATE_SP], dx
 chip8_jump:
+    and ax, 0xFFF
     mov si, ax
     ret
 
@@ -524,16 +525,16 @@ chip8_misc_bcd:
     mov al, [bx + di]
     mov di, [bx + CHIP8_STATE_INDEX]
     add di, 2
-    and di, 0xFFF
+    // and di, 0xFFF
     aam 10 // AL = mod, AH = div
     mov [bp + di], al
     xchg ah, al // AL = div
     dec di
-    and di, 0xFFF
+    // and di, 0xFFF
     aam 10
     mov [bp + di], al
     dec di
-    and di, 0xFFF
+    // and di, 0xFFF
     mov [bp + di], ah
     ret 
 
