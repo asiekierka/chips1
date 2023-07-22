@@ -31,31 +31,10 @@ static const uint8_t __wf_rom chip8_buzzer_wave[] = {
 void wait_for_vblank(void) {
 	while (inportb(IO_LCD_LINE) != 144) cpu_halt();	
 }
-
-__attribute__((no_assume_ss_data))
-static void chips1_subdisp_font_colors(bool invert) {
-	if (ws_system_color_active()) {
-		MEM_COLOR_PALETTE(1)[0 ^ invert] = 0x000;
-		MEM_COLOR_PALETTE(1)[1 ^ invert] = 0xFFF;
-	} else if (invert) {
-		outportw(IO_SCR_PAL(1), MONO_PAL_COLORS(7, 0, 0, 0));
-	} else {
-		outportw(IO_SCR_PAL(1), MONO_PAL_COLORS(0, 7, 0, 0));
-	}
-}
-
+#ifndef __WONDERFUL_WWITCH__
 __attribute__((interrupt))
-void subdisp_font_line_handler(void) {
-	if (inportb(IO_LCD_INTERRUPT) == 55) {
-		chips1_subdisp_font_colors(true);
-		outportb(IO_LCD_INTERRUPT, 63);
-	} else {
-		chips1_subdisp_font_colors(false);
-		outportb(IO_LCD_INTERRUPT, 55);
-	}
-
-	ws_hwint_ack(HWINT_LINE);
-}
+#endif
+extern void subdisp_font_line_handler(void);
 
 static void chips1_subdisp_game_colors(uint8_t flags, uint16_t bg, uint16_t fg) {
 	if (ws_system_color_active()) {
@@ -76,7 +55,12 @@ static void chips1_subdisp_game_colors(uint8_t flags, uint16_t bg, uint16_t fg) 
 
 void chips1_init_subdisp_font(void) {
 	outportb(IO_DISPLAY_CTRL, inportb(IO_DISPLAY_CTRL) & ~DISPLAY_SCR2_ENABLE);
-	chips1_subdisp_font_colors(false);
+	if (ws_system_color_active()) {
+		MEM_COLOR_PALETTE(1)[0] = 0xFFF;
+		MEM_COLOR_PALETTE(1)[1] = 0x000;
+	} else {
+		outportw(IO_SCR_PAL(1), MONO_PAL_COLORS(7, 0, 0, 0));
+	}
 	outportb(IO_SCR2_WIN_X1, 0);
 	outportb(IO_SCR2_WIN_X2, 223);
 	outportb(IO_SCR2_WIN_Y1, 0);
@@ -117,7 +101,7 @@ void chips1_init_sound(void) {
 	// configure sound chip
 	outportb(IO_SND_CH_CTRL, 0);
 	outportb(IO_SND_OUT_CTRL, SND_OUT_HEADPHONES_ENABLE | SND_OUT_SPEAKER_ENABLE | SND_OUT_DIVIDER_2);
-	outportw(IO_SND_FREQ_CH1, 1840); // 440 Hz
+	outportw(IO_SND_FREQ_CH1, SND_FREQ_HZ(440));
 	outportb(IO_SND_VOL_CH1, 0xFF);
 }
 
@@ -366,9 +350,9 @@ int main(void) {
 		chips1_select_game();
 
 		while (true) {
+			wait_for_vblank();
 			update_keys();
 			if (keys_held == 0) break;
-			wait_for_vblank();
 		}
 		chips1_init_subdisp_game();
 		chips1_launcher_run(&launcher_entries[game_index]);
