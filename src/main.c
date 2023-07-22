@@ -36,6 +36,28 @@ __attribute__((interrupt))
 #endif
 extern void subdisp_font_line_handler(void);
 
+static uint16_t keys_pressed, keys_held, keys_released;
+static uint8_t repeat_counter = 0;
+
+static void update_keys(void) {
+	uint16_t new_keys_held = ws_keypad_scan();
+	keys_pressed = new_keys_held & (~keys_held); // held now but not before
+	keys_released = ~new_keys_held & keys_held; // held before but not now
+	keys_held = new_keys_held;
+
+	if (keys_held != 0) {
+		repeat_counter++;
+		if (repeat_counter == 18) {
+			keys_pressed |= keys_held;
+		} else if (repeat_counter == 23) {
+			repeat_counter = 18;
+			keys_pressed |= keys_held;
+		}
+	} else {
+		repeat_counter = 0;
+	}
+}
+
 static void chips1_subdisp_game_colors(uint8_t flags, uint16_t bg, uint16_t fg) {
 	if (ws_system_color_active()) {
 		MEM_COLOR_PALETTE(2)[0] = bg;
@@ -56,11 +78,14 @@ static void chips1_subdisp_game_colors(uint8_t flags, uint16_t bg, uint16_t fg) 
 void chips1_init_subdisp_font(void) {
 	outportb(IO_DISPLAY_CTRL, inportb(IO_DISPLAY_CTRL) & ~DISPLAY_SCR2_ENABLE);
 	if (ws_system_color_active()) {
-		MEM_COLOR_PALETTE(1)[0] = 0xFFF;
+		MEM_COLOR_PALETTE(1)[0] = 0xEEE;
 		MEM_COLOR_PALETTE(1)[1] = 0x000;
 	} else {
-		outportw(IO_SCR_PAL(1), MONO_PAL_COLORS(7, 0, 0, 0));
+		outportw(IO_SCR_PAL(1), MONO_PAL_COLORS(0, 7, 0, 0));
 	}
+	outportb(IO_LCD_INTERRUPT, 56);
+	ws_hwint_set_handler(HWINT_IDX_LINE, subdisp_font_line_handler);
+	ws_hwint_enable(HWINT_LINE);
 	outportb(IO_SCR2_WIN_X1, 0);
 	outportb(IO_SCR2_WIN_X2, 223);
 	outportb(IO_SCR2_WIN_Y1, 0);
@@ -68,11 +93,7 @@ void chips1_init_subdisp_font(void) {
 	outportb(IO_SCR2_SCRL_X, 0);
 	outportb(IO_SCR2_SCRL_Y, 0);
 	ws_screen_fill_tiles(SCREEN_2, SCR_ENTRY_PALETTE(1) + FONT_TILE_OFFSET, 0, 0, 28, 32);
-	outportb(IO_DISPLAY_CTRL, inportb(IO_DISPLAY_CTRL) | DISPLAY_SCR2_ENABLE);
-
-	outportb(IO_LCD_INTERRUPT, 55);
-	ws_hwint_set_handler(HWINT_IDX_LINE, subdisp_font_line_handler);
-	ws_hwint_enable(HWINT_LINE);
+	outportb(IO_DISPLAY_CTRL, inportb(IO_DISPLAY_CTRL) | DISPLAY_SCR1_ENABLE | DISPLAY_SCR2_ENABLE);
 }
 
 void chips1_init_subdisp_game(void) {
@@ -89,8 +110,7 @@ void chips1_init_subdisp_game(void) {
 	for (uint16_t i = 0; i < 32*32; i++) {
 		SCREEN_2[i] = SCR_ENTRY_PALETTE(3 ^ (i & 1)) | (((i >> 1) & 0x7) << 3) | ((i >> 5) & 0x7);
 	}
-
-	outportb(IO_DISPLAY_CTRL, inportb(IO_DISPLAY_CTRL) | DISPLAY_SCR2_ENABLE);
+	outportb(IO_DISPLAY_CTRL, inportb(IO_DISPLAY_CTRL) | DISPLAY_SCR1_ENABLE | DISPLAY_SCR2_ENABLE);
 }
 
 void chips1_init_sound(void) {
@@ -113,11 +133,22 @@ void chips1_init_display(void) {
 
 	// configure palettes, memory
 	ws_display_set_shade_lut(SHADE_LUT_DEFAULT);
-	if (ws_mode_set(WS_MODE_COLOR)) {
-		MEM_COLOR_PALETTE(0)[0] = 0x999;
+	
+	while (true) {
+		update_keys();
+		if (keys_pressed != 0) break;
+	}
+	while (inportb(IO_LCD_LINE) != 1);
+	if (keys_pressed & KEY_A) {
+		ws_mode_set(WS_MODE_COLOR);
+		/* MEM_COLOR_PALETTE(0)[0] = 0x999;
 		MEM_COLOR_PALETTE(0)[1] = 0x222;
 		MEM_COLOR_PALETTE(0)[2] = 0x666;
-		MEM_COLOR_PALETTE(0)[3] = 0xDDD;
+		MEM_COLOR_PALETTE(0)[3] = 0xDDD; */
+		MEM_COLOR_PALETTE(0)[0] = 0xDE2;
+		MEM_COLOR_PALETTE(0)[1] = 0x222;
+		MEM_COLOR_PALETTE(0)[2] = 0x45D;
+		MEM_COLOR_PALETTE(0)[3] = 0x551;
 	} else {
 		outportw(IO_SCR_PAL(0), MONO_PAL_COLORS(3, 6, 4, 1));
 	}
@@ -135,29 +166,7 @@ void chips1_init_display(void) {
 	ws_screen_put_tiles(SCREEN_1, CHIP8_RAM, 0, 0, 28, 18);
 
 	// configure screen 2 window
-	outportb(IO_DISPLAY_CTRL, DISPLAY_SCR1_ENABLE | DISPLAY_SCR2_WIN_INSIDE);
-}
-
-static uint16_t keys_pressed, keys_held, keys_released;
-static uint8_t repeat_counter = 0;
-
-static void update_keys(void) {
-	uint16_t new_keys_held = ws_keypad_scan();
-	keys_pressed = new_keys_held & (~keys_held); // held now but not before
-	keys_released = ~new_keys_held & keys_held; // held before but not now
-	keys_held = new_keys_held;
-
-	if (keys_held != 0) {
-		repeat_counter++;
-		if (repeat_counter == 18) {
-			keys_pressed |= keys_held;
-		} else if (repeat_counter == 23) {
-			repeat_counter = 18;
-			keys_pressed |= keys_held;
-		}
-	} else {
-		repeat_counter = 0;
-	}
+	outportb(IO_DISPLAY_CTRL, DISPLAY_SCR2_WIN_INSIDE);
 }
 
 static uint16_t last_c8_key;
