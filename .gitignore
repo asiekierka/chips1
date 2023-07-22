@@ -1,3 +1,4 @@
 build
 *_lzsa.bin
 src/game_list.inc
+src/xo_pitch_table.inc

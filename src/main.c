@@ -11,6 +11,9 @@
 #include "default_font_bin.h"
 
 #include "game_list.inc"
+#ifdef CHIP8_SUPPORT_XOCHIP
+#include "xo_pitch_table.inc"
+#endif
 #include "ws/display.h"
 #include "ws/hardware.h"
 #include "ws/keypad.h"
@@ -121,7 +124,6 @@ void chips1_init_sound(void) {
 	// configure sound chip
 	outportb(IO_SND_CH_CTRL, 0);
 	outportb(IO_SND_OUT_CTRL, SND_OUT_HEADPHONES_ENABLE | SND_OUT_SPEAKER_ENABLE | SND_OUT_DIVIDER_2);
-	outportw(IO_SND_FREQ_CH1, SND_FREQ_HZ(440));
 	outportb(IO_SND_VOL_CH1, 0xFF);
 }
 
@@ -198,6 +200,11 @@ void chips1_run(void) {
 		}
 
 		if (chip8_state.sound > 0) {
+#ifdef CHIP8_SUPPORT_XOCHIP
+			if (chip8_state.pflag & CHIP8_PFLAG_XOCHIP) {
+				outportw(IO_SND_FREQ_CH1, chip8_xo_pitch_table[chip8_state.pitch]);
+			}
+#endif
 			outportb(IO_SND_CH_CTRL, SND_CH1_ENABLE);
 			chip8_state.sound--;
 		} else {
@@ -206,7 +213,7 @@ void chips1_run(void) {
 
 		update_keys();
 		if (keys_released & KEY_START) {
-			return;
+			break;
 		}
 
 		last_c8_key = chip8_state.key;
@@ -227,9 +234,11 @@ void chips1_run(void) {
 
 		wait_for_vblank();	
 	}
+	outportb(IO_SND_CH_CTRL, 0);
 }
 
 void chips1_launcher_run(const launcher_entry_t __wf_rom* entry) {
+	outportw(IO_SND_FREQ_CH1, SND_FREQ_HZ(440));
 	chip8_init(entry->flags & 0x05);
 	wsx_lzsa2_decompress(chip8_state.ram + 0x200, entry->data);
 	memcpy(chip8_key_map, entry->keymap, 10);

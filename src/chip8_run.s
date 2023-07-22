@@ -508,6 +508,12 @@ chip8x_misc_index16_set:
     ret
 #endif
 
+chip8x_misc_set_pitch:
+    call __chip8_di_regx
+    mov al, byte ptr [bx + di]
+    mov byte ptr [bx + CHIP8_STATE_XO_PITCH], al
+    ret
+
 chip8_misc:
 #ifdef CHIP8_SUPPORT_XOCHIP
     cmp ax, 0xF000
@@ -538,6 +544,10 @@ chip8_misc:
     je chip8s_misc_load_memory_rpl
     cmp al, 0x30
     je chip8_misc_set_sfont
+#endif
+#ifdef CHIP8_SUPPORT_XOCHIP
+    cmp al, 0x3A
+    je chip8x_misc_set_pitch
 #endif
     jmp chip8_todo
 

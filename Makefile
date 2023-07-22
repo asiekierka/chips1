@@ -111,12 +111,16 @@ src/game_list.inc: game_list.txt compile_game_list.lua
 	@echo "  LUA     game_list.txt"
 	$(_V)wf-lua compile_game_list.lua game_list.txt > $@
 
+src/xo_pitch_table.inc: misc/gen_xo_pitch_table.lua
+	@echo "  LUA     $@"
+	$(_V)wf-lua $< > $@
+
 $(BUILDDIR)/%.s.o : %.s
 	@echo "  AS      $<"
 	@$(MKDIR) -p $(@D)
 	$(_V)$(CC) $(ASFLAGS) -MMD -MP -c -o $@ $<
 
-$(BUILDDIR)/%.c.o : %.c src/game_list.inc
+$(BUILDDIR)/%.c.o : %.c src/game_list.inc src/xo_pitch_table.inc
 	@echo "  CC      $<"
 	@$(MKDIR) -p $(@D)
 	$(_V)$(CC) $(CFLAGS) -MMD -MP -c -o $@ $<
