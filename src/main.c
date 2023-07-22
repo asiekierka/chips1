@@ -134,6 +134,7 @@ void chips1_init_display(void) {
 	// configure palettes, memory
 	ws_display_set_shade_lut(SHADE_LUT_DEFAULT);
 	
+#if 0
 	while (true) {
 		update_keys();
 		if (keys_pressed != 0) break;
@@ -141,6 +142,9 @@ void chips1_init_display(void) {
 	while (inportb(IO_LCD_LINE) != 1);
 	if (keys_pressed & KEY_A) {
 		ws_mode_set(WS_MODE_COLOR);
+#else
+	if (ws_mode_set(WS_MODE_COLOR)) {
+#endif
 		/* MEM_COLOR_PALETTE(0)[0] = 0x999;
 		MEM_COLOR_PALETTE(0)[1] = 0x222;
 		MEM_COLOR_PALETTE(0)[2] = 0x666;

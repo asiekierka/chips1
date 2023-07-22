@@ -38,7 +38,7 @@ john/octorancher.lzsa.bin|Octo Rancher|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=24|TODO: 
 john/outlaw.lzsa.bin|Outlaw|X1=5,X3=8,X4=7,X2=9,A=6,B=C,FG=FA0,BG=530,OPC=28|
 john/piper.lzsa.bin|Piper|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=128,BG=00F,FG=FF4|
 john/pumpkindressup.lzsa.bin|Pumpkin 'Dreess' Up|X1=5,X3=8,X4=7,X2=9,A=6,B=C,BG=FF4,FG=862,INV|TODO: Edit help screen
-john/rps_oj1.lzsa.bin|Rock, Paper, Scissors|X1=5,X3=8,X4=7,X2=9,A=6,B=C|TODO: Edit help screen
+#john/rps_oj1.lzsa.bin|Rock, Paper, Scissors|X1=5,X3=8,X4=7,X2=9,A=6,B=C|TODO: Edit help screen
 john/slipperyslope.lzsa.bin|Slippery Slope|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=64,BG=ADF,FG=11B,INV|
 john/spacejam.lzsa.bin|SpaceJam!|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=128|
 john/spaceracer.lzsa.bin|Space Racer|X1=4,X3=7,A=D,B=E,OPC=20|TODO: Edit help screen
@@ -57,7 +57,7 @@ john-schip/blackrainbow.lzsa.bin|Black Rainbow|X1=5,X3=8,X4=7,X2=9,A=0,B=0,OPC=1
 john-schip/rockto.lzsa.bin|Rockto|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=48,BG=111,FG=EEE,SCHIP|
 #john-schip/snake.lzsa.bin|Snake|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=48,BG=113,FG=5A5,SCHIP|
 #john-schip/octogon.lzsa.bin|Super Octogon|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=256,BG=000,FG=F0F,SCHIP|FIXME
-john-schip/sweetcopter.lzsa.bin|Sw8 Copter|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=128,SCHIP,FG=FFF,BG=458|
+#john-schip/sweetcopter.lzsa.bin|Sw8 Copter|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=128,SCHIP,FG=FFF,BG=458|
 john-schip/turnover77.lzsa.bin|Turnover '77|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=32,SCHIP,FG=FF4,BG=D81|
 john-schip/ultimatetictactoe.lzsa.bin|Ultimate Tic-Tac-Toe|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=32,SCHIP|
 NULL||

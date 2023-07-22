@@ -29,7 +29,6 @@
 #include "john/outlaw_lzsa_bin.h"
 #include "john/piper_lzsa_bin.h"
 #include "john/pumpkindressup_lzsa_bin.h"
-#include "john/rps_oj1_lzsa_bin.h"
 #include "john/slipperyslope_lzsa_bin.h"
 #include "john/spacejam_lzsa_bin.h"
 #include "john/spaceracer_lzsa_bin.h"
@@ -39,7 +38,6 @@
 #include "john/wdl_lzsa_bin.h"
 #include "john-schip/blackrainbow_lzsa_bin.h"
 #include "john-schip/rockto_lzsa_bin.h"
-#include "john-schip/sweetcopter_lzsa_bin.h"
 #include "john-schip/turnover77_lzsa_bin.h"
 #include "john-schip/ultimatetictactoe_lzsa_bin.h"
 #include "john/8ceattourny_d1_lzsa_bin.h"
@@ -49,7 +47,7 @@
 #include "john-schip/bulb_lzsa_bin.h"
 #include "john-schip/squad_lzsa_bin.h"
 
-#define LAUNCHER_ENTRIES_COUNT 54
+#define LAUNCHER_ENTRIES_COUNT 52
 
 static const launcher_entry_t __wf_rom launcher_entries[] = {
     {
@@ -693,26 +691,6 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         "Pumpkin 'Dreess' Up"
     },
     {
-        rps_oj1_lzsa,
-        {
-            6,
-            12,
-            5,
-            9,
-            8,
-            7,
-            255,
-            255,
-            255,
-            255
-        },
-        0,
-        4095,
-        9,
-        0,
-        "Rock, Paper, Scissors"
-    },
-    {
         slipperyslope_lzsa,
         {
             6,
@@ -911,26 +889,6 @@ static const launcher_entry_t __wf_rom launcher_entries[] = {
         48,
         1,
         "Rockto"
-    },
-    {
-        sweetcopter_lzsa,
-        {
-            6,
-            12,
-            5,
-            9,
-            8,
-            7,
-            255,
-            255,
-            255,
-            255
-        },
-        1112,
-        4095,
-        128,
-        1,
-        "Sw8 Copter"
     },
     {
         turnover77_lzsa,
