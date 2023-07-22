@@ -19,19 +19,21 @@
 #define CHIP8_STATE_SP    24
 #define CHIP8_STATE_KEY   26
 #define CHIP8_STATE_RAND  28
-#define CHIP8_STATE_RAM   32
+#define CHIP8_STATE_RAM   30
 #if defined(CHIP8_SUPPORT_XOCHIP)
-#define CHIP8_STATE_XO_PITCH 34
-#define CHIP8_STATE_REGS_RPL 36
-#define CHIP8_STATE_STACK 52
-#elif defined(CHIP8_SUPPORT_SCHIP)
+#define CHIP8_STATE_XO_PITCH 32
+#define CHIP8_STATE_XO_PLANE 33
 #define CHIP8_STATE_REGS_RPL 34
-#define CHIP8_STATE_STACK 42
+#define CHIP8_STATE_STACK 50
+#elif defined(CHIP8_SUPPORT_SCHIP)
+#define CHIP8_STATE_REGS_RPL 32
+#define CHIP8_STATE_STACK 40
 #else
-#define CHIP8_STATE_STACK 34
+#define CHIP8_STATE_STACK 32
 #endif
 
-#define CHIP8_PFLAG_SCHIP  0x01
+#define CHIP8_PFLAG_SCHIP_ONLY  0x01
+#define CHIP8_PFLAG_SCHIP  0x05
 #define CHIP8_PFLAG_HIRES  0x02
 #define CHIP8_PFLAG_XOCHIP 0x04
 #define CHIP8_PFLAG_EXIT   0x80
@@ -51,11 +53,11 @@ typedef struct {
     uint8_t pflag;
     uint16_t sp;
     uint16_t key;
-    uint32_t rand;
+    uint16_t rand;
     uint8_t __wf_iram* ram;
 #if defined(CHIP8_SUPPORT_XOCHIP)
     uint8_t pitch;
-    uint8_t reserved_0;
+    uint8_t plane;
     uint8_t regs_rpl[16];
 #elif defined(CHIP8_SUPPORT_SCHIP)
     uint8_t regs_rpl[8];

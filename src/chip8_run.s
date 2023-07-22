@@ -92,7 +92,7 @@ chip8_jump_offset:
     xor di, di
     xor dx, dx
 #ifdef CHIP8_SUPPORT_SCHIP
-    test byte ptr [bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_SCHIP
+    test byte ptr [bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_SCHIP_ONLY
     jz chip8_jump_offset_chip8
     mov dl, ah
     mov di, dx
@@ -212,7 +212,70 @@ __chip8_skip_ne_postcmp:
 L3:
     ret
 
+#ifdef CHIP8_SUPPORT_XOCHIP
+    // CX = count
+    // DX = direction (0x0001 or 0xFFFF)
+    // BX:DI = register area
+    // BP:DI = memory area
+chip8e_ls_memory_init:
+    shr al, 4
+    and ax, 0x0F0F // AH = X, AL = Y
+
+    mov di, [bx + CHIP8_STATE_INDEX]
+    sub bx, di // adjust BX
+    xor cx, cx
+    mov cl, ah
+    add bp, cx // adjust BP
+    sub cl, al // CL = X - Y
+    mov dx, 0x0001
+    cmp ah, al
+    jae chip8e_ls_memory_init_positive
+    neg cl // CL = Y - X
+    add dx, 0xFFFE // DX = -1
+chip8e_ls_memory_init_positive:
+    inc cl
+
+    ret
+
+chip8e_store_memory:
+    push bx
+    push cx
+    push bp
+    call chip8e_ls_memory_init
+chip8e_store_memory_loop:
+    mov al, [bx + di]
+    mov [bp + di], al
+    add di, dx
+    loop chip8e_store_memory_loop
+    pop bp
+    pop cx
+    pop bx
+    ret
+
+chip8e_load_memory:
+    push bx
+    push cx
+    push bp
+    call chip8e_ls_memory_init
+chip8e_load_memory_loop:
+    mov al, [bp + di]
+    mov [bx + di], al
+    add di, dx
+    loop chip8e_store_memory_loop
+    pop bp
+    pop cx
+    pop bx
+    ret
+
+#endif
+
 chip8_skip_eq_xy:
+#ifdef CHIP8_SUPPORT_XOCHIP
+    cmp al, 2
+    je chip8e_store_memory
+    cmp al, 3
+    je chip8e_load_memory
+#endif
     call __chip8_di_regxy_ydh
     cmp byte ptr [bx + di], dh
     jmp __chip8_skip_eq_postcmp
@@ -299,7 +362,7 @@ __chip8_alu_sub_carry:
 chip8_alu_shr:
     pop di
 #ifdef CHIP8_SUPPORT_SCHIP
-    test byte ptr [bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_SCHIP
+    test byte ptr [bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_SCHIP_ONLY
     jz chip8_alu_shr_no_schip
     shr byte ptr [bx + di], 1
     jmp __chip8_alu_carry
@@ -318,7 +381,7 @@ chip8_alu_sub_rev:
 chip8_alu_shl:
     pop di
 #ifdef CHIP8_SUPPORT_SCHIP
-    test byte ptr [bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_SCHIP
+    test byte ptr [bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_SCHIP_ONLY
     jz chip8_alu_shl_no_schip
     shl byte ptr [bx + di], 1
     jmp __chip8_alu_carry
@@ -386,7 +449,7 @@ chip8_misc_store_memory_loop:
     pop cx
     pop bx
 #ifdef CHIP8_SUPPORT_SCHIP
-    test byte ptr [bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_SCHIP
+    test byte ptr [bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_SCHIP_ONLY
     jnz chip8_misc_store_memory_schip
 #endif
     mov [bx + CHIP8_STATE_INDEX], di
@@ -410,7 +473,7 @@ chip8_misc_load_memory_loop:
     pop cx
     pop bx
 #ifdef CHIP8_SUPPORT_SCHIP
-    test byte ptr [bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_SCHIP
+    test byte ptr [bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_SCHIP_ONLY
     jnz chip8_misc_load_memory_schip
 #endif
     mov [bx + CHIP8_STATE_INDEX], di
@@ -521,12 +584,23 @@ chip8x_misc_set_pitch:
     mov al, byte ptr [bx + di]
     mov byte ptr [bx + CHIP8_STATE_XO_PITCH], al
     ret
+
+chip8x_misc_set_waveform:
+    // FIXME: Stub.
+    ret
+
+chip8x_misc_set_plane:
+    and ah, 0x03
+    mov byte ptr [bx + CHIP8_STATE_XO_PLANE], ah
+    ret
 #endif
 
 chip8_misc:
 #ifdef CHIP8_SUPPORT_XOCHIP
     cmp ax, 0xF000
     je chip8x_misc_index16_set
+    cmp ax, 0xF002
+    je chip8x_misc_set_waveform
 #endif
     cmp al, 0x33
     je chip8_misc_bcd
@@ -555,6 +629,8 @@ chip8_misc:
     je chip8_misc_set_sfont
 #endif
 #ifdef CHIP8_SUPPORT_XOCHIP
+    cmp al, 0x01
+    je chip8x_misc_set_plane
     cmp al, 0x3A
     je chip8x_misc_set_pitch
 #endif
@@ -590,7 +666,7 @@ chip8_misc_add_index:
     mov dx, word ptr [bx + CHIP8_STATE_INDEX]
     add dx, ax
 #ifdef CHIP8_SUPPORT_SCHIP
-    test byte ptr[bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_SCHIP
+    test byte ptr[bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_SCHIP_ONLY
     jnz chip8_misc_add_index_skip_overflow
 #endif
     mov word ptr [bx + 0xF], 0x0

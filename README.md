@@ -48,13 +48,14 @@ Note that the quirks specific to SUPER-CHIP 1.0 are not supported.
 | Feature/Quirk | Supported? |
 | - | - |
 | Scroll up (00DN) | ✅ |
-| Load/store register (5XY2, 5XY3) | - |
+| Load/store register (5XY2, 5XY3) | ✅ |
 | Large address space (F000 NNNN) | ✅ (memory limit, see below) |
-| Two-plane drawing (FN01) | - |
-| Custom audio samples (F002) | - |
+| Two-plane drawing (FN01) | - (stub) |
+| Custom audio samples (F002) | - (stub) |
 | Pitch register (FX3A) | ✅ |
-| Quirk: Mode change clears screen | ✅ |
 | Quirk: 16-register RPL user flag load/store | ✅ |
+| Quirk: Mode change clears screen | ✅ |
+| Quirk: Sprite draw wrapping | - |
 
 ### Octo
 

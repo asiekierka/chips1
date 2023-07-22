@@ -42,6 +42,8 @@ function apply_values(game, s)
 			game.keymap[10] = tonumber(value, 16)
 		elseif key == "SCHIP" then
 			game.flags = game.flags | 0x01
+		elseif key == "XOCHIP" then
+			game.flags = game.flags | 0x04
 		elseif key == "DIAGONAL" then
 			game.flags = game.flags | 0x02
 		elseif key == "INV" then
