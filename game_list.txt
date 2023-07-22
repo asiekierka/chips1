@@ -1,0 +1,31 @@
+X1=2,X3=8,X4=4,X2=6,OPC=9
+#c8games/15PUZZLE.lzsa.bin|15-Puzzle||FIXME
+c8games/BLINKY.lzsa.bin|Blinky|X1=3,X3=6,X4=7,X2=8,A=F,B=F,SCHIP,OPC=12|
+c8games/BLITZ.lzsa.bin|Blitz|A=7,B=5
+c8games/BRIX.lzsa.bin|Brix|OPC=7
+c8games/CONNECT4.lzsa.bin|Connect Four|A=15,B=15
+c8games/GUESS.lzsa.bin|Guess Your Number|A=5,B=F
+c8games/HIDDEN.lzsa.bin|Hidden|A=5,B=5,SCHIP
+c8games/INVADERS.lzsa.bin|Invaders|A=5,B=5,SCHIP
+c8games/KALEID.lzsa.bin|Kaleid|
+c8games/MERLIN.lzsa.bin|Merlin|
+c8games/MISSILE.lzsa.bin|Missile|A=8,B=8
+c8games/PONG.lzsa.bin|Pong (1)|A=C,B=D,X1=1,X3=4
+c8games/PONG2.lzsa.bin|Pong (2)|A=C,B=D,X1=1,X3=4
+c8games/PUZZLE.lzsa.bin|Puzzle|X1=8,X3=2,X4=4,X2=6|FIXME|
+#c8games/SYZYGY.lzsa.bin|Syzygy|X1=3,X3=6,X4=9,X2=9,A=E,B=E|FIXME
+c8games/TANK.lzsa.bin|Tank|X1=8,X3=2,X4=4,X2=6,A=5,B=5,OPC=11
+#c8games/TETRIS.lzsa.bin|Tetris|X4=5,X2=6,X3=7,A=4,B=4,X1=4
+c8games/TICTAC.lzsa.bin|Tic-Tac-Toe|DIAGONAL,A=5,SCHIP
+c8games/UFO.lzsa.bin|UFO|X1=5,X3=5
+#c8games/VBRIX.lzsa.bin|V-Brix|X1=1,X3=4,A=7,B=7|FIXME: Collisions
+#c8games/VERS.lzsa.bin|Vers|X1=1,X3=4|FIXME
+c8games/WIPEOFF.lzsa.bin|Wipeoff|
+tests/test_bc.lzsa.bin|Test - BC|SCHIP
+tests/test_coraxplus.lzsa.bin|Test - Corax+|X1=E,X3=F,A=A
+tests/test_flags.lzsa.bin|Test - Flags|X1=E,X3=F,A=A
+tests/test_metteo.lzsa.bin|Test - Metteo|X1=E,X3=F,A=A
+tests/test_quirks.lzsa.bin|Test - Quirks/CHIP8|X1=E,X3=F,A=A
+tests/test_quirks.lzsa.bin|Test - Quirks/SCHIP|X1=E,X3=F,A=A,SCHIP
+tests/test_skosolur.lzsa.bin|Test - Skosulor|X1=E,X3=F,A=A
+tests/test_skosolur.lzsa.bin|Test - Skosulor/SCHIP|X1=E,X3=F,A=A,SCHIP
