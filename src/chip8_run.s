@@ -41,7 +41,7 @@ chip8_run:
 
     mov cx, dx
     mov bx, ax
-    mov bp, CHIP8_RAM_ADDRESS
+    mov bp, [bx + CHIP8_STATE_RAM]
     mov si, [bx + CHIP8_STATE_PC]
 
 chip8_run_opcode:
@@ -176,18 +176,30 @@ chip8_skip_eq:
     cmp byte ptr [bx + di], ah
 __chip8_skip_eq_postcmp:
     jne L2
+#ifdef CHIP8_SUPPORT_XOCHIP
+    cmp word ptr [bp + si], 0xF000
+    je chip8_skip_xo_f000
+#endif
     add si, 2
-    and si, 0x0FFF
 L2:
     ret
+
+#ifdef CHIP8_SUPPORT_XOCHIP
+chip8_skip_xo_f000:
+    add si, 4
+    ret
+#endif
 
 chip8_skip_ne:
     call __chip8_di_regx
     cmp byte ptr [bx + di], ah
 __chip8_skip_ne_postcmp:
-    je L3
+    je L2
+#ifdef CHIP8_SUPPORT_XOCHIP
+    cmp word ptr [bp + si], 0xF000
+    je chip8_skip_xo_f000
+#endif
     add si, 2
-    and si, 0x0FFF
 L3:
     ret
 
@@ -489,7 +501,18 @@ chip8_random:
     mov [bx + di], al
     ret
 
+#ifdef CHIP8_SUPPORT_XOCHIP
+chip8x_misc_index16_set:
+    mov word ptr [bp + si], ax
+    add si, 2
+    ret
+#endif
+
 chip8_misc:
+#ifdef CHIP8_SUPPORT_XOCHIP
+    cmp ax, 0xF000
+    je chip8x_misc_index16_set
+#endif
     cmp al, 0x33
     je chip8_misc_bcd
     cmp al, 0x55
@@ -540,8 +563,18 @@ chip8_misc_add_index:
     call __chip8_di_regx
     mov al, byte ptr [bx + di]
     xor ah, ah
+    /* Disable contested overflow handling. */
+    /* It's unknown which emulators, if any, worked this way. */
+#if 1
+    add word ptr [bx + CHIP8_STATE_INDEX], ax
+#else
     mov dx, word ptr [bx + CHIP8_STATE_INDEX]
     add dx, ax
+#ifdef CHIP8_SUPPORT_SCHIP
+    test byte ptr[bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_SCHIP
+    jnz chip8_misc_add_index_skip_overflow
+#endif
+    mov word ptr [bx + 0xF], 0x0
     cmp dx, 0x1000
     jae chip8_misc_add_index_overflow
     mov word ptr [bx + CHIP8_STATE_INDEX], dx
@@ -550,6 +583,8 @@ chip8_misc_add_index_overflow:
     and dx, 0xFFF
     mov word ptr [bx + CHIP8_STATE_INDEX], dx
     mov word ptr [bx + 0xF], 0x1
+chip8_misc_add_index_skip_overflow:
+#endif
     ret
 
 chip8_misc_set_font:

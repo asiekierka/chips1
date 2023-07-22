@@ -49,7 +49,7 @@ Note that the quirks specific to SUPER-CHIP 1.0 are not supported.
 | - | - |
 | Scroll up (00DN) | ✅ |
 | Load/store register (5XY2, 5XY3) | - |
-| Large address space (F000 NNNN) | - |
+| Large address space (F000 NNNN) | ✅ (memory limit, see below) |
 | Two-plane drawing (FN01) | - |
 | Custom audio samples (F002) | - |
 | Pitch register (FX3A) | - |
@@ -69,4 +69,5 @@ Note that the quirks specific to SUPER-CHIP 1.0 are not supported.
 | Feature/Quirk | Supported? |
 | - | - |
 | Stack size | 16 entries |
-| Maximum memory size | 4 KB|
+| Maximum memory size (CHIP-8/SUPER-CHIP) | 4 KB |
+| Maximum memory size (XO-CHIP | 47.5 KB (64 KB expected) |

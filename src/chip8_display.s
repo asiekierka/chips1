@@ -176,7 +176,6 @@ chip8_display_xy_done:
     mov si, ax
     add si, CHIP8_TILE_ADDRESS
 
-    mov bp, CHIP8_RAM_ADDRESS
     add bp, word ptr [bx + CHIP8_STATE_INDEX]
     mov byte ptr [bx + 0xF], 0
 

@@ -48,17 +48,24 @@ static const uint8_t __wf_rom chip8_sfont_octo[] = {
 __attribute__((aligned(2)))
 chip8_state_t chip8_state;
 
-void chip8_init(void) {
+void chip8_init(uint8_t pflag) {
     uint16_t old_rand = chip8_state.rand;
     memset(&chip8_state, 0, sizeof(chip8_state_t));
     chip8_state.lkey = 0xFF;
     chip8_state.pc = 0x0200;
     chip8_state.rand = old_rand;
+    chip8_state.pflag = pflag;
 
-    memset(CHIP8_RAM, 0, 0x1000);
-    memcpy(CHIP8_RAM + CHIP8_RAM_FONT_OFFSET, chip8_font_octo, sizeof(chip8_font_octo));
+    if (pflag & CHIP8_PFLAG_XOCHIP) {
+        chip8_state.ram = (uint8_t __wf_iram*) 0x4000;
+        memset(chip8_state.ram, 0, 0xFE00 - 0x4000);
+    } else {
+        chip8_state.ram = (uint8_t __wf_iram*) 0x1000;
+        memset(chip8_state.ram, 0, 0x1000);
+    }
+    memcpy(chip8_state.ram + CHIP8_RAM_FONT_OFFSET, chip8_font_octo, sizeof(chip8_font_octo));
 #ifdef CHIP8_SUPPORT_SCHIP
-    memcpy(CHIP8_RAM + CHIP8_RAM_SFONT_OFFSET, chip8_sfont_octo, sizeof(chip8_sfont_octo));
+    memcpy(chip8_state.ram + CHIP8_RAM_SFONT_OFFSET, chip8_sfont_octo, sizeof(chip8_sfont_octo));
 #endif
     chip8_clear_display();
 }

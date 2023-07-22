@@ -166,8 +166,8 @@ void chips1_init_display(void) {
 
 	// configure screen 1
 	wsx_lzsa2_decompress(MEM_TILE(SAFE_TILE_OFFSET), chips1_bg_tiles_lzsa);
-	wsx_lzsa2_decompress(CHIP8_RAM, chips1_bg_map_lzsa);
-	ws_screen_put_tiles(SCREEN_1, CHIP8_RAM, 0, 0, 28, 18);
+	wsx_lzsa2_decompress((uint8_t __wf_iram*) 0x1000, chips1_bg_map_lzsa);
+	ws_screen_put_tiles(SCREEN_1, (uint8_t __wf_iram*) 0x1000, 0, 0, 28, 18);
 
 	// configure screen 2 window
 	outportb(IO_DISPLAY_CTRL, DISPLAY_SCR2_WIN_INSIDE);
@@ -230,12 +230,11 @@ void chips1_run(void) {
 }
 
 void chips1_launcher_run(const launcher_entry_t __wf_rom* entry) {
-	chip8_init();
-	wsx_lzsa2_decompress(CHIP8_RAM + 0x200, entry->data);
+	chip8_init(entry->flags & 0x05);
+	wsx_lzsa2_decompress(chip8_state.ram + 0x200, entry->data);
 	memcpy(chip8_key_map, entry->keymap, 10);
 	chip8_opcodes_per_tick = entry->opcodes;
 	chip8_launcher_flags = entry->flags;
-	chip8_state.pflag |= entry->flags & 0x05;
 	wait_for_vblank();
 	chips1_subdisp_game_colors(entry->flags, entry->bg_color, entry->fg_color);
 	chips1_run();

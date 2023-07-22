@@ -1,11 +1,11 @@
 #ifndef _CHIP8_H_
 #define _CHIP8_H_
 
+#include <wonderful.h>
 #include "chip8_config.h"
 
 #define CHIP8_RAM_FONT_OFFSET 0x0000
 #define CHIP8_RAM_SFONT_OFFSET 0x0050
-#define CHIP8_RAM_ADDRESS 0x1000
 #define CHIP8_TILE_START 0
 #define CHIP8_TILE_ADDRESS (0x2000 + ((CHIP8_TILE_START) * 16))
 #define CHIP8_STACK_ENTRIES 16
@@ -19,14 +19,16 @@
 #define CHIP8_STATE_SP    24
 #define CHIP8_STATE_KEY   26
 #define CHIP8_STATE_RAND  28
+#define CHIP8_STATE_RAM   32
 #if defined(CHIP8_SUPPORT_XOCHIP)
-#define CHIP8_STATE_REGS_RPL 32
-#define CHIP8_STATE_STACK 48
+#define CHIP8_STATE_XO_PITCH 34
+#define CHIP8_STATE_REGS_RPL 36
+#define CHIP8_STATE_STACK 52
 #elif defined(CHIP8_SUPPORT_SCHIP)
-#define CHIP8_STATE_REGS_RPL 32
-#define CHIP8_STATE_STACK 40
+#define CHIP8_STATE_REGS_RPL 34
+#define CHIP8_STATE_STACK 42
 #else
-#define CHIP8_STATE_STACK 32
+#define CHIP8_STATE_STACK 34
 #endif
 
 #define CHIP8_PFLAG_SCHIP  0x01
@@ -39,8 +41,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define CHIP8_RAM ((uint8_t*) 0x1000)
-
 typedef struct {
     uint8_t regs[16];
     uint16_t pc;
@@ -52,7 +52,10 @@ typedef struct {
     uint16_t sp;
     uint16_t key;
     uint32_t rand;
+    uint8_t __wf_iram* ram;
 #if defined(CHIP8_SUPPORT_XOCHIP)
+    uint8_t pitch;
+    uint8_t reserved_0;
     uint8_t regs_rpl[16];
 #elif defined(CHIP8_SUPPORT_SCHIP)
     uint8_t regs_rpl[8];
@@ -64,7 +67,7 @@ extern chip8_state_t chip8_state;
 
 // chip8.c
 
-void chip8_init(void);
+void chip8_init(uint8_t pflag);
 
 // chip8_run.s
 
