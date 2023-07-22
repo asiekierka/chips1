@@ -33,7 +33,7 @@ john/flightrunner.lzsa.bin|Flight Runner|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=64,BG=0
 john/fuse.lzsa.bin|Fuse|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=7,BG=9D2,FG=060,INV|
 john/ghostescape.lzsa.bin|Ghost Escape|A=0,OPC=40,BG=3EF,FG=F0F|
 john/glitchghost.lzsa.bin|Glitch Ghost|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=64|TODO: Edit help screen
-john/mastermind.lzsa.bin|Mastermind|X1=5,X3=8,X4=7,X2=9,A=6,B=C,BG=060,OPC=64|TODO: Edit help screen, controls
+john/mastermind.lzsa.bin|Mastermind|X1=5,X3=8,X4=7,X2=9,A=8,B=F,Y2=D,Y1=C,BG=060,OPC=64|
 john/octorancher.lzsa.bin|Octo Rancher|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=24|TODO: Edit game over screen
 john/outlaw.lzsa.bin|Outlaw|X1=5,X3=8,X4=7,X2=9,A=6,B=C,FG=FA0,BG=530,OPC=28|
 john/piper.lzsa.bin|Piper|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=128,BG=00F,FG=FF4|
