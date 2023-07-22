@@ -4,8 +4,8 @@
 #include <stdint.h>
 #include <wonderful.h>
 
-#define SCREEN_1 ((uint16_t*) 0x3000)
-#define SCREEN_2 ((uint16_t*) 0x3800)
+#define SCREEN_1 ((uint16_t __wf_iram*) 0x3000)
+#define SCREEN_2 ((uint16_t __wf_iram*) 0x3800)
 
 #define LAUNCHER_FLAG_SCHIP 0x01
 #define LAUNCHER_FLAG_DIAGONALS 0x02
@@ -24,7 +24,7 @@
 #define KEY_IDX_A     0
 
 typedef struct {
-    const void __wf_iram __far* data;
+    const void __wf_rom* data;
     uint8_t keymap[10];
     uint16_t bg_color;
     uint16_t fg_color;

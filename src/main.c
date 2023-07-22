@@ -3,6 +3,9 @@
 #include <ws.h>
 #include <wsx/lzsa.h>
 #include <wsx/planar_unpack.h>
+#ifdef __WONDERFUL_WWITCH__
+#include <sys/bios.h>
+#endif
 #include "chip8.h"
 #include "main.h"
 
@@ -43,7 +46,11 @@ static uint16_t keys_pressed, keys_held, keys_released;
 static uint8_t repeat_counter = 0;
 
 static void update_keys(void) {
+#ifdef __WONDERFUL_WWITCH__
+	uint16_t new_keys_held = key_press_check();
+#else
 	uint16_t new_keys_held = ws_keypad_scan();
+#endif
 	keys_pressed = new_keys_held & (~keys_held); // held now but not before
 	keys_released = ~new_keys_held & keys_held; // held before but not now
 	keys_held = new_keys_held;
@@ -58,6 +65,14 @@ static void update_keys(void) {
 		}
 	} else {
 		repeat_counter = 0;
+	}
+}
+
+static void wait_for_no_keys(void) {
+	while (true) {
+		wait_for_vblank();
+		update_keys();
+		if (keys_held == 0) return;
 	}
 }
 
@@ -117,13 +132,16 @@ void chips1_init_subdisp_game(void) {
 }
 
 void chips1_init_sound(void) {
-	// configure wavetable
+#ifdef __WONDERFUL_WWITCH__
+	sound_init();
+	sound_set_output(SND_OUT_HEADPHONES_ENABLE | SND_OUT_SPEAKER_ENABLE | SND_OUT_DIVIDER_2);
+	sound_set_wave(0, chip8_buzzer_wave);
+#else
 	outportb(IO_SND_WAVE_BASE, SND_WAVE_BASE(0x37C0));
 	memcpy((uint8_t __wf_iram*) 0x37C0, chip8_buzzer_wave, 16);
-
-	// configure sound chip
-	outportb(IO_SND_CH_CTRL, 0);
 	outportb(IO_SND_OUT_CTRL, SND_OUT_HEADPHONES_ENABLE | SND_OUT_SPEAKER_ENABLE | SND_OUT_DIVIDER_2);
+#endif
+	outportb(IO_SND_CH_CTRL, 0);
 	outportb(IO_SND_VOL_CH1, 0xFF);
 }
 
@@ -272,7 +290,7 @@ static void draw_launcher_entry(uint8_t y, int i) {
 	}
 }
 
-void chips1_select_game(void) {
+bool chips1_select_game(void) {
 	int16_t game_scroll_y = game_index * 8;
 	int16_t game_scroll_y_camera = game_scroll_y;
 
@@ -340,7 +358,11 @@ void chips1_select_game(void) {
 				}
 			}
 		} else if (keys_pressed & KEY_A) {
-			return;
+			return true;
+#ifdef __WONDERFUL_WWITCH__
+		} else if (keys_pressed & KEY_START) {
+			return false;
+#endif
 		}
 
 		outportb(IO_SCR2_SCRL_Y, game_scroll_y_camera - GAME_SCROLL_Y_OFFSET);
@@ -366,18 +388,18 @@ int main(void) {
 	chips1_init_sound();
 
 	while(1) {
-		wait_for_vblank();
+		wait_for_no_keys();
 		chips1_init_subdisp_font();
-		chips1_select_game();
+		if (!chips1_select_game()) break;
 
-		while (true) {
-			wait_for_vblank();
-			update_keys();
-			if (keys_held == 0) break;
-		}
+		wait_for_no_keys();
 		chips1_init_subdisp_game();
 		chips1_launcher_run(&launcher_entries[game_index]);
 	}
 
+#ifdef __WONDERFUL_WWITCH__
+	return 0;
+#else
 	while(1);
+#endif
 }
