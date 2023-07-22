@@ -134,6 +134,7 @@ chip8_machine_routine_e0:
     // Clear display
     cmp ax, 0x00E0
     jne chip8_machine_routine_schip // unlikely jump
+chip8_clear_display_internal:
     push cx
     ASM_PLATFORM_CALL chip8_clear_display
     pop cx
@@ -149,11 +150,19 @@ chip8_machine_routine_fd:
     cmp ax, 0x00FD
     jne chip8_machine_routine_fe
     or byte ptr [bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_EXIT
+#ifdef CHIP8_SUPPORT_XOCHIP
+    test byte ptr [bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_XOCHIP
+    jnz chip8_clear_display_internal
+#endif
     ret
 chip8_machine_routine_fe:
     cmp ax, 0x00FE
     jne chip8_machine_routine_ff    
     and byte ptr [bx + CHIP8_STATE_PFLAG], ~CHIP8_PFLAG_HIRES
+#ifdef CHIP8_SUPPORT_XOCHIP
+    test byte ptr [bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_XOCHIP
+    jnz chip8_clear_display_internal
+#endif
     ret
 chip8_machine_routine_ff:
     cmp ax, 0x00FF

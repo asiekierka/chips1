@@ -53,7 +53,7 @@ Note that the quirks specific to SUPER-CHIP 1.0 are not supported.
 | Two-plane drawing (FN01) | - |
 | Custom audio samples (F002) | - |
 | Pitch register (FX3A) | ✅ |
-| Quirk: Mode change clears screen | - |
+| Quirk: Mode change clears screen | ✅ |
 | Quirk: 16-register RPL user flag load/store | ✅ |
 
 ### Octo
