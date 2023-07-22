@@ -140,6 +140,11 @@ chip8_machine_routine_e0:
     ret
 chip8_machine_routine_schip:
 #ifdef CHIP8_SUPPORT_SCHIP
+    push ax
+    and ax, 0xFFF0
+    cmp ax, 0x00C0
+    pop ax
+    je chip8_scroll_down
 chip8_machine_routine_fd:
     cmp ax, 0x00FD
     jne chip8_machine_routine_fe
@@ -156,6 +161,13 @@ chip8_machine_routine_ff:
     or byte ptr [bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_HIRES
     ret
 chip8_machine_routine_xochip:
+#ifdef CHIP8_SUPPORT_XOCHIP
+    push ax
+    and ax, 0xFFF0
+    cmp ax, 0x00D0
+    pop ax
+    je chip8_scroll_up
+#endif
 #endif
     jmp chip8_todo
 

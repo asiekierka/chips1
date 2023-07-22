@@ -50,8 +50,8 @@ NULL||
 #john-schip/binding.lzsa.bin|Binding of COSMAC|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=512,SCHIP,FG=FF4,BG=862|Too slow
 john-schip/blackrainbow.lzsa.bin|Black Rainbow|X1=5,X3=8,X4=7,X2=9,A=0,B=0,OPC=192,BG=555,FG=EEE,SCHIP|
 #john-schip/chipcross.lzsa.bin|Chipcross|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=160,FG=FF4,BG=862,SCHIP|FIXME: Buggy
-#john-schip/dodge.lzsa.bin|Dodge|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=12,FG=FF4,BG=862,SCHIP|FIXME: Requires V scrolling
-# Eaty the Alien requires scrolling
+john-schip/dodge.lzsa.bin|Dodge|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=12,FG=FF4,BG=862,SCHIP|
+# Eaty the Alien requires H scrolling
 #john-schip/horseyjump.lzsa.bin|Horsey Jump|A=C,BG=050,FG=EEE|Requires drawing 16x16 sprites in lores
 #john-schip/octopeg.lzsa.bin|Octopeg|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=48,BG=124,FG=BDF,SCHIP|FIXME
 john-schip/rockto.lzsa.bin|Rockto|X1=5,X3=8,X4=7,X2=9,A=6,B=C,OPC=48,BG=111,FG=EEE,SCHIP|

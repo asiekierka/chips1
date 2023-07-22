@@ -5,6 +5,138 @@
     .intel_syntax noprefix
 
     .global chip8_display
+    .global chip8_scroll_down
+    .global chip8_scroll_up
+
+#ifdef CHIP8_SUPPORT_SCHIP
+chip8_scroll_prepare:
+    push ss
+    push ss
+    pop es
+    pop ds
+
+    and al, 0x0F
+    test byte ptr [bx + CHIP8_STATE_PFLAG], CHIP8_PFLAG_HIRES
+    jnz chip8_scroll_prepare_hires
+    shl al, 1
+chip8_scroll_prepare_hires:
+    // DX=0x40-lines => ((lines^0x3F)+1)
+    mov dx, ax
+    xor dl, 0x3F
+    inc dl
+
+    // BX=step increment
+    // from 0x00 to (0xFE-lines*2)
+    // from (lines*2) to 0xFE
+    mov bx, 0x100
+    sub bx, ax
+    sub bx, ax
+    ret
+
+    // DX = lines to copy
+    // BX = pitch
+    // Si, DI = areas
+chip8_scroll_movsw:
+    // DX=>CX = lines to copy
+.rept 7
+    mov cx, dx
+    rep movsw
+    add si, bx
+    add di, bx
+.endr
+    mov cx, dx
+    rep movsw
+    ret
+
+chip8_scroll_stosw:
+    // DX=>CX = lines to copy
+    xor ax, ax
+.rept 7
+    mov cx, dx
+    rep stosw
+    add di, bx
+.endr
+    mov cx, dx
+    rep stosw
+    ret
+
+chip8_scroll_down:
+    push bx
+    push cx
+    push si
+    push ds
+    push es
+
+    // AX=lines
+    call chip8_scroll_prepare
+
+    // scroll down means: copy from 0x00..(0x7E-lines*2) to (lines*2)..0x7E
+    // SI=0x7E-lines*2
+    // DI=0x7E
+    mov si, (CHIP8_TILE_ADDRESS + 0x7E)
+    mov di, si
+    sub si, ax
+    sub si, ax
+
+    // copy backwards
+    std
+    call chip8_scroll_movsw
+
+    // fill empty space
+    mov di, (CHIP8_TILE_ADDRESS)
+    mov bx, 0x80
+    sub bx, ax
+    sub bx, ax
+    mov dx, ax
+
+    cld
+    call chip8_scroll_stosw
+
+chip8_scroll_finish:
+    pop es
+    pop ds
+    pop si
+    pop cx
+    pop bx
+    ret
+
+#ifdef CHIP8_SUPPORT_XOCHIP
+chip8_scroll_up:
+    push bx
+    push cx
+    push si
+    push ds
+    push es
+
+    // AX=lines
+    call chip8_scroll_prepare
+
+    // scroll up means: copy from 0x00..(lines*2) to (0x7E-lines*2)..0x7E
+    // SI=lines*2
+    // DI=0x00
+    mov si, (CHIP8_TILE_ADDRESS)
+    mov di, si
+    add si, ax
+    add si, ax
+
+    // copy forwards
+    cld
+    call chip8_scroll_movsw
+
+    // fill empty space
+    shl ax, 1
+    mov di, (CHIP8_TILE_ADDRESS + 0x80)
+    sub di, ax
+    mov bx, 0x80
+    sub bx, ax
+    shr ax, 1
+    mov dx, ax
+
+    call chip8_scroll_stosw
+
+    jmp chip8_scroll_finish
+#endif
+#endif
 
     // Execution layout:
     // DS:BX = offset to chip8_state
@@ -102,9 +234,12 @@ chip8_display_row_nobit:
     pop dx
     pop ax
     xor [si], ax
-    xor [si + 128], dx
     xor [si + 2], ax
+    cmp si, (CHIP8_TILE_ADDRESS + 128*7)
+    jae chip8_display_row_nobit_lastrow
+    xor [si + 128], dx
     xor [si + 128 + 2], dx
+chip8_display_row_nobit_lastrow:
     add si, 4
     test si, 0x007F
     loopne chip8_display_row
@@ -175,7 +310,10 @@ chip8_display_hires_row_nobit:
     pop dx
     pop ax
     xor [si], ax
+    cmp si, (CHIP8_TILE_ADDRESS + 128*7)
+    jae chip8_display_hires_row_nobit_lastrow
     xor [si + 128], dx
+chip8_display_hires_row_nobit_lastrow:
     add si, 2
     test si, 0x007F
     loopne chip8_display_hires_row
@@ -218,7 +356,10 @@ chip8_display_hires_16x16_row_nobit:
     pop dx
     pop ax
     xor [si], ax
+    cmp si, (CHIP8_TILE_ADDRESS + 128*7)
+    jae chip8_display_hires_16x16_row_nobit_lastrow
     xor [si + 128], dx
+chip8_display_hires_16x16_row_nobit_lastrow:
     add si, 2
     test si, 0x007F
     loopne chip8_display_hires_16x16_row
