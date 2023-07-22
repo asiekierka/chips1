@@ -506,13 +506,13 @@ chip8x_misc_index16_set:
     mov word ptr [bp + si], ax
     add si, 2
     ret
-#endif
 
 chip8x_misc_set_pitch:
     call __chip8_di_regx
     mov al, byte ptr [bx + di]
     mov byte ptr [bx + CHIP8_STATE_XO_PITCH], al
     ret
+#endif
 
 chip8_misc:
 #ifdef CHIP8_SUPPORT_XOCHIP
