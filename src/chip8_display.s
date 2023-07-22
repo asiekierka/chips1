@@ -305,7 +305,7 @@ chip8_display_hires_row:
     and dx, [si + 128]
     or ax, dx
     jz chip8_display_hires_row_nobit
-    mov byte ptr es:[bx + 0xF], 1
+    inc byte ptr es:[bx + 0xF]
 chip8_display_hires_row_nobit:
     pop dx
     pop ax
@@ -317,6 +317,7 @@ chip8_display_hires_row_nobit_lastrow:
     add si, 2
     test si, 0x007F
     loopne chip8_display_hires_row
+    add byte ptr es:[bx + 0xF], cl
 
     jmp chip8_display_done
 
@@ -351,7 +352,7 @@ chip8_display_hires_16x16_row:
     and dx, [si + 128]
     or ax, dx
     jz chip8_display_hires_16x16_row_nobit
-    mov byte ptr es:[bx + 0xF], 1
+    inc byte ptr es:[bx + 0xF]
 chip8_display_hires_16x16_row_nobit:
     pop dx
     pop ax
@@ -363,6 +364,7 @@ chip8_display_hires_16x16_row_nobit_lastrow:
     add si, 2
     test si, 0x007F
     loopne chip8_display_hires_16x16_row
+    add byte ptr es:[bx + 0xF], cl
 
     jmp chip8_display_done
 #endif
