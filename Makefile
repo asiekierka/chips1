@@ -62,7 +62,7 @@ SOURCES_C	:= $(shell find -L $(SOURCEDIRS) -name "*.c")
 WARNFLAGS	:= -Wall
 
 INCLUDEFLAGS	:= $(foreach path,$(INCLUDEDIRS),-I$(path)) \
-		   $(foreach path,$(LIBDIRS),-I$(path)/include)
+		   $(foreach path,$(LIBDIRS),-isystem $(path)/include)
 
 LIBDIRSFLAGS	:= $(foreach path,$(LIBDIRS),-L$(path)/lib)
 
@@ -94,7 +94,7 @@ DEPS		:= $(OBJS:.o=.d)
 
 .PHONY: all clean
 
-all: $(ROM)
+all: $(ROM) compile_commands.json
 
 $(ROM) $(ELF): $(OBJS)
 	@echo "  ROMLINK $@"
@@ -102,7 +102,11 @@ $(ROM) $(ELF): $(OBJS)
 
 clean:
 	@echo "  CLEAN"
-	$(_V)$(RM) $(ROM) $(BUILDDIR)
+	$(_V)$(RM) $(ROM) $(BUILDDIR) compile_commands.json
+
+compile_commands.json: $(OBJS) | Makefile
+	@echo "  MERGE   compile_commands.json"
+	$(_V)$(WF)/bin/wf-compile-commands-merge $@ $(patsubst %.o,%.cc.json,$^)
 
 # Rules
 # -----
@@ -118,12 +122,12 @@ src/xo_pitch_table.inc: misc/gen_xo_pitch_table.lua
 $(BUILDDIR)/%.s.o : %.s
 	@echo "  AS      $<"
 	@$(MKDIR) -p $(@D)
-	$(_V)$(CC) $(ASFLAGS) -MMD -MP -c -o $@ $<
+	$(_V)$(CC) $(ASFLAGS) -MMD -MP -MJ $(patsubst %.o,%.cc.json,$@) -c -o $@ $<
 
 $(BUILDDIR)/%.c.o : %.c src/game_list.inc src/xo_pitch_table.inc
 	@echo "  CC      $<"
 	@$(MKDIR) -p $(@D)
-	$(_V)$(CC) $(CFLAGS) -MMD -MP -c -o $@ $<
+	$(_V)$(CC) $(CFLAGS) -MMD -MP -MJ $(patsubst %.o,%.cc.json,$@) -c -o $@ $<
 
 $(BUILDDIR)/%.bin.o $(BUILDDIR)/%_bin.h : %.bin
 	@echo "  BIN2C   $<"
