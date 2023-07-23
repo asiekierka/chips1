@@ -26,7 +26,11 @@ subdisp_font_line_handler_color_loop:
 subdisp_font_line_handler_mono:
 subdisp_font_line_handler_end:
     in al, IO_LCD_INTERRUPT
+#ifdef EMULATOR_HACKS
+    xor al, 8
+#else
     xor al, 120
+#endif
     out IO_LCD_INTERRUPT, al
     mov al, 0x10
     out IO_HWINT_ACK, al

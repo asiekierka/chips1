@@ -17,10 +17,6 @@
 #ifdef CHIP8_SUPPORT_XOCHIP
 #include "xo_pitch_table.inc"
 #endif
-#include "ws/display.h"
-#include "ws/hardware.h"
-#include "ws/keypad.h"
-#include "ws/system.h"
 
 uint16_t chip8_opcodes_per_tick;
 uint8_t chip8_key_map[10];
@@ -101,7 +97,11 @@ void chips1_init_subdisp_font(void) {
 	} else {
 		outportw(IO_SCR_PAL(1), MONO_PAL_COLORS(0, 7, 0, 0));
 	}
+#ifdef EMULATOR_HACKS
+	outportb(IO_LCD_INTERRUPT, 55);
+#else
 	outportb(IO_LCD_INTERRUPT, 56);
+#endif
 	ws_hwint_set_handler(HWINT_IDX_LINE, subdisp_font_line_handler);
 	ws_hwint_enable(HWINT_LINE);
 	outportb(IO_SCR2_WIN_X1, 0);
@@ -169,10 +169,17 @@ void chips1_init_display(void) {
 		MEM_COLOR_PALETTE(0)[1] = 0x222;
 		MEM_COLOR_PALETTE(0)[2] = 0x666;
 		MEM_COLOR_PALETTE(0)[3] = 0xDDD; */
+#ifdef EMULATOR_HACKS
+		MEM_COLOR_PALETTE(0)[0] = 0xCA4;
+		MEM_COLOR_PALETTE(0)[1] = 0x222;
+		MEM_COLOR_PALETTE(0)[2] = 0x58C;
+		MEM_COLOR_PALETTE(0)[3] = 0x653;
+#else
 		MEM_COLOR_PALETTE(0)[0] = 0xDE2;
 		MEM_COLOR_PALETTE(0)[1] = 0x222;
 		MEM_COLOR_PALETTE(0)[2] = 0x45D;
 		MEM_COLOR_PALETTE(0)[3] = 0x551;
+#endif
 	} else {
 		outportw(IO_SCR_PAL(0), MONO_PAL_COLORS(3, 6, 4, 1));
 	}
